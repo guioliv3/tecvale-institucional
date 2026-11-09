@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-page: #f7f7f7;
+  --color-surface: #e9e9e9;
+  --color-wine: #741e23;
+  --color-wine-dark: #5a1519;
+  --color-ink: #242321;
+  --color-muted: #686868;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+
+/* Margem lateral compartilhada por cabeçalho, hero e demais seções */
+@utility frame-x {
+  padding-inline: 1rem;
+  @media (min-width: 768px) {
+    padding-inline: 1.75rem;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-wine);
+    color: #fff;
+  }
+  input,
+  textarea {
+    caret-color: var(--color-wine);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-wine);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: #fff;
+  }
+}
