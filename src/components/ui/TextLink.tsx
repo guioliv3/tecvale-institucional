@@ -1,13 +1,21 @@
 import { Link } from "react-router";
 import type { ReactNode } from "react";
 
-export function TextLink({ to, children }: { to: string; children: ReactNode }) {
+export function TextLink({
+  to,
+  children,
+  variant = "default",
+}: {
+  to: string;
+  children: ReactNode;
+  variant?: "default" | "light";
+}) {
   return (
     <Link
       to={to}
-      className="group inline-flex items-center gap-1.5 pb-1 text-[13px] text-wine transition-colors hover:text-wine-dark"
+      className={`group inline-flex items-center gap-1.5 pb-1 text-[13px] transition-colors ${variant === "light" ? "text-white hover:text-white/75" : "text-wine hover:text-wine-dark"}`}
     >
-      <span className="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-75 after:bg-current after:transition-transform after:duration-300 group-hover:after:scale-x-100 motion-reduce:after:transition-none">
+      <span className="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform group-hover:after:scale-x-100 motion-reduce:after:transition-none">
         {children}
       </span>
       <svg

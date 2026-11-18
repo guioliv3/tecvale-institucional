@@ -10,6 +10,23 @@
   --font-serif: Georgia, "Times New Roman", serif;
   --font-sans: Arial, Helvetica, sans-serif;
 }
+
+@keyframes trajectory-slide {
+  from {
+    opacity: 0.75;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .trajectory-slide {
+    animation: trajectory-slide 280ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
 /* Margem lateral compartilhada por cabeçalho, hero e demais seções */
 @utility frame-x {
   padding-inline: 1rem;

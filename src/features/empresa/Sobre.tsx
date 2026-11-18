@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Photo } from "@/components/ui/Photo";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { PageSectionNav } from "@/components/ui/PageSectionNav";
+import { TimelineBlock } from "@/components/ui/TimelineBlock";
 import { TextLink } from "@/components/ui/TextLink";
 import { img } from "@/content/empreendimentos";
+import { TrajectoryTimeline } from "./TrajectoryTimeline";
 import { SobreHero } from "./SobreHero";
 
 const sections = [
@@ -52,7 +54,7 @@ export function Sobre() {
         <SobreHero />
       </div>
       <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-10 md:pb-36 md:pt-16">
-        <div className="grid gap-10 md:grid-cols-[220px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-24">
+        <div className="grid gap-10 md:grid-cols-[150px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-8">
           <div className="md:sticky md:top-32 md:h-fit">
             <PageSectionNav title="A Tecvale" sections={sections} visible={menuVisible} />
           </div>
@@ -85,6 +87,9 @@ export function Sobre() {
                     e amplia sua atuação, levando mais sofisticação aos empreendimentos.
                   </p>
                 </div>
+              </div>
+              <div className="mt-8 md:mt-10">
+                <TextLink to="/contato">Fale com a Tecvale</TextLink>
               </div>
             </section>
 
@@ -121,49 +126,14 @@ export function Sobre() {
               <p className="mt-4 text-xs text-muted">
                 Imagens ilustrativas do material visual atual.
               </p>
+              <div className="mt-6">
+                <TextLink to="/empreendimentos">Ver empreendimentos</TextLink>
+              </div>
             </section>
 
-            <section
-              id="trajetoria"
-              aria-labelledby="trajetoria-title"
-              className="scroll-mt-28 bg-surface px-6 py-10 md:px-12 md:py-14"
-            >
-              <SectionTitle id="trajetoria-title" eyebrow="Trajetória">
-                Uma empresa em movimento.
-              </SectionTitle>
-              <ol className="mt-10 divide-y divide-ink/15 border-y border-ink/15">
-                {[
-                  ["2009", "Mirante do Vale", "Jacareí"],
-                  ["2012", "Condomínio Mirante do Vale", "Jacareí"],
-                  ["2014", "Residencial Johanna", "Jacareí"],
-                  ["2017", "Maison Soraya", ""],
-                  ["2019", "Residencial Antonio de Vimioso", "São José dos Campos"],
-                  ["2021", "Green Life Villa Branca", "Jacareí"],
-                  ["2023", "Believe Residence", "São José dos Campos"],
-                ].map(([year, name, place]) => (
-                  <li
-                    key={year}
-                    className="grid gap-1 py-4 md:grid-cols-[100px_1fr_auto] md:items-baseline md:gap-6"
-                  >
-                    <span className="font-serif text-xl text-wine">{year}</span>
-                    <span className="text-sm text-ink md:text-base">{name}</span>
-                    {place && <span className="text-sm text-muted">{place}</span>}
-                  </li>
-                ))}
-              </ol>
-              <p className="mt-4 text-xs text-muted">
-                Marcos publicados pela Tecvale em{" "}
-                <a
-                  href="https://tecvaleconstrutora.com.br/obras-entregues/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline underline-offset-4 hover:text-ink"
-                >
-                  Obras Entregues
-                </a>
-                .
-              </p>
-            </section>
+            <TimelineBlock id="trajetoria" eyebrow="Trajetória" title="Uma empresa em movimento.">
+              <TrajectoryTimeline />
+            </TimelineBlock>
 
             <section
               id="essencia"
@@ -198,35 +168,90 @@ export function Sobre() {
                   </article>
                 ))}
               </div>
+              <div className="mt-6">
+                <TextLink to="/contato">Converse com a Tecvale</TextLink>
+              </div>
             </section>
 
             <section
               id="qualidade"
               aria-labelledby="qualidade-title"
-              className="scroll-mt-28 bg-wine px-6 py-10 text-white md:px-12 md:py-14"
+              className="scroll-mt-28 py-20 md:py-32"
             >
-              <Eyebrow>Como construímos</Eyebrow>
-              <h2 id="qualidade-title" className="mt-4 max-w-xl text-3xl text-white md:text-5xl">
+              <SectionTitle id="qualidade-title" eyebrow="Como construímos">
                 Qualidade é compromisso em cada etapa.
-              </h2>
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/80 md:text-base">
-                A política da qualidade reúne compromissos que atravessam o projeto, a obra e as
-                relações com clientes, fornecedores e colaboradores.
+              </SectionTitle>
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+                A qualidade orienta o desenvolvimento dos produtos, a condução das obras e as
+                relações com clientes, fornecedores e colaboradores. Na prática, ela se traduz em
+                melhoria contínua, responsabilidade e atenção às exigências aplicáveis.
               </p>
-              <ul className="mt-8 grid gap-x-8 border-t border-white/30 md:grid-cols-2">
+              <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-3">
                 {[
-                  "Melhoria contínua dos produtos e serviços",
-                  "Satisfação dos clientes e parceria com fornecedores",
-                  "Sustentabilidade nos canteiros de obras",
-                  "Inovação nos produtos",
-                  "Atendimento às exigências legais e requisitos aplicáveis",
-                  "Capacitação dos colaboradores",
-                ].map((item) => (
-                  <li key={item} className="border-b border-white/20 py-4 text-sm text-white/90">
-                    {item}
-                  </li>
+                  {
+                    title: "No projeto",
+                    items: [
+                      {
+                        title: "Melhoria contínua",
+                        description:
+                          "Aperfeiçoamos produtos e serviços, buscando elevar a qualidade a cada etapa.",
+                      },
+                      {
+                        title: "Inovação",
+                        description:
+                          "Novas ideias contribuem para o desenvolvimento dos empreendimentos.",
+                      },
+                    ],
+                  },
+                  {
+                    title: "Na obra",
+                    items: [
+                      {
+                        title: "Sustentabilidade",
+                        description:
+                          "Práticas sustentáveis fazem parte dos compromissos nos canteiros de obras.",
+                      },
+                      {
+                        title: "Conformidade",
+                        description:
+                          "Atendemos às exigências legais e aos requisitos aplicáveis a cada atividade.",
+                      },
+                    ],
+                  },
+                  {
+                    title: "Nas relações",
+                    items: [
+                      {
+                        title: "Parceria e satisfação",
+                        description:
+                          "Valorizamos a satisfação dos clientes e a parceria com fornecedores.",
+                      },
+                      {
+                        title: "Capacitação",
+                        description:
+                          "O desenvolvimento dos colaboradores também integra nossa política de qualidade.",
+                      },
+                    ],
+                  },
+                ].map(({ title, items }) => (
+                  <article key={title} className="border-t border-ink/20 pt-5">
+                    <h3 className="font-serif text-2xl text-wine">{title}</h3>
+                    <ul className="mt-6 space-y-6">
+                      {items.map((item) => (
+                        <li key={item.title}>
+                          <h4 className="text-sm font-medium text-wine">{item.title}</h4>
+                          <p className="mt-2 text-sm leading-relaxed text-muted">
+                            {item.description}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
                 ))}
-              </ul>
+              </div>
+              <div className="mt-8">
+                <TextLink to="/contato">Fale com nossa equipe</TextLink>
+              </div>
             </section>
 
             <section
@@ -262,6 +287,9 @@ export function Sobre() {
                     compartilhada e bicicletas compartilhadas.
                   </p>
                 </article>
+              </div>
+              <div className="mt-8">
+                <TextLink to="/contato">Saiba mais com a Tecvale</TextLink>
               </div>
             </section>
 

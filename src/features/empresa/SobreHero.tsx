@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import { getEmpreendimento } from "@/content/empreendimentos";
 import { ProvisionalTag } from "@/components/ui/ProvisionalTag";
+import { TextLink } from "@/components/ui/TextLink";
 
 const cover = getEmpreendimento("ares-aquarius")!.cover;
 
@@ -24,15 +24,11 @@ export function SobreHero() {
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-base">
             Conheça as pessoas, os compromissos e os lugares que dão forma à nossa trajetória.
           </p>
-          <Link
-            to="#historia"
-            className="mt-6 inline-flex h-10 items-center border border-white px-4 text-xs uppercase tracking-[0.12em] transition-colors hover:bg-white hover:text-ink"
-          >
-            Conheça a Tecvale{" "}
-            <span aria-hidden="true" className="ml-5">
-              ↓
-            </span>
-          </Link>
+          <div className="mt-6">
+            <TextLink to="/contato" variant="light">
+              Fale com a Tecvale
+            </TextLink>
+          </div>
         </div>
       </div>
     </section>
