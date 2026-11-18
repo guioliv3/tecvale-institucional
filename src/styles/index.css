@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-page: #f7f7f7;
@@ -7,10 +7,9 @@
   --color-wine-dark: #5a1519;
   --color-ink: #242321;
   --color-muted: #686868;
-  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-serif: Georgia, "Times New Roman", serif;
   --font-sans: Arial, Helvetica, sans-serif;
 }
-
 /* Margem lateral compartilhada por cabeçalho, hero e demais seções */
 @utility frame-x {
   padding-inline: 1rem;
@@ -43,7 +42,10 @@
   textarea {
     caret-color: var(--color-wine);
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-serif);
     font-weight: 400;
     letter-spacing: -0.02em;
