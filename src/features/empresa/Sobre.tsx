@@ -4,17 +4,21 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { PageSectionNav } from "@/components/ui/PageSectionNav";
 import { TimelineBlock } from "@/components/ui/TimelineBlock";
 import { TextLink } from "@/components/ui/TextLink";
+import { RollingNumber } from "@/components/ui/RollingNumber";
 import { img } from "@/content/empreendimentos";
 import { TrajectoryTimeline } from "./TrajectoryTimeline";
 import { SobreHero } from "./SobreHero";
+import { GoogleReviewsCarousel } from "./GoogleReviewsCarousel";
+import { SocialResponsibilityLogos } from "./SocialResponsibilityLogos";
 
 const sections = [
   { id: "historia", label: "Nossa história" },
   { id: "trajetoria", label: "Trajetória" },
   { id: "essencia", label: "Nossa essência" },
+  { id: "resultados", label: "Nossos resultados" },
   { id: "qualidade", label: "Como construímos" },
   { id: "responsabilidade", label: "Responsabilidade" },
-  { id: "resultados", label: "Nossos resultados" },
+  { id: "avaliacoes", label: "Avaliações" },
 ];
 
 function SectionTitle({
@@ -163,7 +167,7 @@ export function Sobre() {
                   ],
                 ].map(([title, copy]) => (
                   <article key={title} className="border-t border-ink/20 py-5">
-                    <h3 className="font-serif text-2xl">{title}</h3>
+                    <h3 className="font-serif text-2xl text-wine">{title}</h3>
                     <p className="mt-3 text-sm leading-relaxed text-muted">{copy}</p>
                   </article>
                 ))}
@@ -171,6 +175,44 @@ export function Sobre() {
               <div className="mt-6">
                 <TextLink to="/contato">Converse com a Tecvale</TextLink>
               </div>
+            </section>
+
+            <section
+              id="resultados"
+              aria-labelledby="resultados-title"
+              className="scroll-mt-28 pt-10 md:pt-14"
+            >
+              <div>
+                <Eyebrow>Nossos resultados</Eyebrow>
+                <h2 id="resultados-title" className="mt-4 text-3xl md:text-5xl">
+                  O que construímos juntos.
+                </h2>
+                <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted md:text-base">
+                  Cada empreendimento lançado e cada unidade entregue representam uma história que
+                  começa. Os números a seguir mostram a dimensão do que a Tecvale construiu junto
+                  às pessoas e às cidades onde atua.
+                </p>
+                <div className="mt-5">
+                  <TextLink to="/empreendimentos">Ver empreendimentos</TextLink>
+                </div>
+              </div>
+              <dl className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-8">
+                {[
+                  { value: 17, suffix: "+", label: "Anos de mercado" },
+                  { value: 9, suffix: "+", label: "Empreendimentos lançados" },
+                  { value: 21, suffix: " mil+", label: "m² em áreas divulgadas" },
+                  { value: 158, suffix: "+", label: "Unidades entregues" },
+                ].map(({ value, suffix, label }) => (
+                  <div key={label} className="flex min-w-0 flex-col">
+                    <dt className="order-2 mt-3 text-[9px] uppercase leading-relaxed tracking-[0.14em] text-muted md:text-xs">
+                      {label}
+                    </dt>
+                    <dd className="order-1 font-sans text-3xl font-light leading-none tracking-[-0.05em] text-wine sm:text-5xl md:text-7xl">
+                      <RollingNumber value={value} suffix={suffix} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </section>
 
             <section
@@ -266,15 +308,15 @@ export function Sobre() {
                 O compromisso social da Tecvale começa pela comunidade que a cerca. A empresa também
                 inclui a sustentabilidade em seus canteiros de obras.
               </p>
-              <div className="mt-10 grid gap-10 md:grid-cols-2">
+              <div className="mt-10 grid gap-8 md:grid-cols-3 md:gap-6">
                 <article>
                   <h3 className="border-t border-ink/20 pt-4 font-serif text-2xl">
-                    Compromisso social
+                    Apoio que fortalece a comunidade
                   </h3>
                   <p className="mt-5 text-sm leading-relaxed text-muted">
-                    A Tecvale acredita que construir também é assumir responsabilidade com as
-                    pessoas e com a comunidade ao redor. Esse compromisso faz parte dos valores que
-                    orientam a empresa.
+                    A Tecvale apoia instituições que acolhem, cuidam e promovem saúde na região:
+                    Asilo Franciscano Santo Antônio, GACC Vale do Paraíba e Serviço de Hematologia e
+                    Hemoterapia de São José dos Campos.
                   </p>
                 </article>
                 <article>
@@ -287,47 +329,37 @@ export function Sobre() {
                     compartilhada e bicicletas compartilhadas.
                   </p>
                 </article>
+                <article>
+                  <h3 className="border-t border-ink/20 pt-4 font-serif text-2xl">
+                    Quem faz a Tecvale
+                  </h3>
+                  <p className="mt-5 text-sm leading-relaxed text-muted">
+                    Capacitar e manter os colaboradores motivados também faz parte da política de
+                    qualidade da Tecvale. Assim, cada pessoa contribui com atenção e responsabilidade
+                    ao longo da obra.
+                  </p>
+                </article>
               </div>
               <div className="mt-8">
                 <TextLink to="/contato">Saiba mais com a Tecvale</TextLink>
               </div>
+              <div className="mt-12 md:mt-16">
+                <SocialResponsibilityLogos />
+              </div>
             </section>
 
             <section
-              id="resultados"
-              aria-labelledby="resultados-title"
-              className="scroll-mt-28 pt-10 md:pt-14"
+              id="avaliacoes"
+              aria-labelledby="avaliacoes-title"
+              className="scroll-mt-28 py-20 md:py-32"
             >
-              <div>
-                <Eyebrow>Nossos resultados</Eyebrow>
-                <h2 id="resultados-title" className="mt-4 text-3xl md:text-5xl">
-                  O que construímos juntos.
-                </h2>
-                <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted md:text-base">
-                  Sete empreendimentos entregues aparecem na relação publicada pela Tecvale, de
-                  Mirante do Vale, em 2009, ao Believe Residence, em 2023.
-                </p>
-                <div className="mt-5">
-                  <TextLink to="/empreendimentos">Ver empreendimentos</TextLink>
-                </div>
-              </div>
-              <dl className="mt-12 grid grid-cols-3 gap-x-4 md:gap-x-8">
-                {[
-                  ["47+", "Anos de mercado"],
-                  ["199", "Empreendimentos lançados"],
-                  ["5,8", "Milhões de m²"],
-                ].map(([value, label]) => (
-                  <div key={value} className="flex flex-col">
-                    <dt className="order-2 mt-3 text-[9px] uppercase leading-relaxed tracking-[0.14em] text-muted md:text-xs">
-                      {label}
-                    </dt>
-                    <dd className="order-1 font-sans text-5xl font-light leading-none tracking-[-0.05em] text-ink md:text-7xl">
-                      {value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+              <SectionTitle id="avaliacoes-title" eyebrow="Avaliações">
+                Veja o que nossos clientes e parceiros pensam.
+              </SectionTitle>
+              <GoogleReviewsCarousel />
             </section>
+
+
           </div>
         </div>
       </div>

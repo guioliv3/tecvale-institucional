@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ImageHoverLink } from "@/components/ui/ImageHoverLink";
 import { Photo } from "@/components/ui/Photo";
 import { img } from "@/content/empreendimentos";
 
@@ -137,13 +138,15 @@ export function TrajectoryTimeline() {
               {index % 2 === 0 ? (
                 <>
                   <div className="order-2 lg:order-1 lg:pr-10">
-                    <Photo
-                      photo={{
-                        src: img(milestone.image),
-                        alt: `Imagem ilustrativa de arquitetura para ${milestone.name}`,
-                      }}
-                      className="aspect-[16/10]"
-                    />
+                    <ImageHoverLink to="/empreendimentos">
+                      <Photo
+                        photo={{
+                          src: img(milestone.image),
+                          alt: `Imagem ilustrativa de arquitetura para ${milestone.name}`,
+                        }}
+                        className="aspect-[16/10]"
+                      />
+                    </ImageHoverLink>
                   </div>
                   <div className="order-1 lg:order-2 lg:pl-10">
                     <StepButton
@@ -163,13 +166,15 @@ export function TrajectoryTimeline() {
                     />
                   </div>
                   <div className="order-2 lg:order-2 lg:pl-10">
-                    <Photo
-                      photo={{
-                        src: img(milestone.image),
-                        alt: `Imagem ilustrativa de arquitetura para ${milestone.name}`,
-                      }}
-                      className="aspect-[16/10]"
-                    />
+                    <ImageHoverLink to="/empreendimentos">
+                      <Photo
+                        photo={{
+                          src: img(milestone.image),
+                          alt: `Imagem ilustrativa de arquitetura para ${milestone.name}`,
+                        }}
+                        className="aspect-[16/10]"
+                      />
+                    </ImageHoverLink>
                   </div>
                 </>
               )}
