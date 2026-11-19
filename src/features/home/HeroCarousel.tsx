@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { empreendimentos, projectHref } from '@/content/empreendimentos'
+import { empreendimentos, projectHref, type Photo } from '@/content/empreendimentos'
 import { ProvisionalTag } from '@/components/ui/ProvisionalTag'
 
-// Ordem do carrossel: Ares Aquarius primeiro, depois Neori Residence e Noah.
-const order = ['ares-aquarius', 'neori-residence', 'noah']
+// Projetos atualmente em obras, na ordem de destaque da Home.
+const order = ['neori-residence', 'noah']
 const slides = order.flatMap((s) => empreendimentos.filter((e) => e.slug === s))
 const INTERVAL = 7000
 
@@ -19,12 +19,25 @@ function usePrefersReducedMotion() {
   return reduced
 }
 
-export function HeroCarousel() {
+export function HeroCarousel({
+  compact = false,
+  title,
+  description,
+  cover,
+}: {
+  compact?: boolean
+  title?: string
+  description?: string
+  cover?: Photo
+}) {
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
   const [hovering, setHovering] = useState(false)
   const reduced = usePrefersReducedMotion()
-  const autoplay = !reduced && !paused && !hovering
+  const autoplay = !compact && !reduced && !paused && !hovering
+  const imageSlides = compact
+    ? [{ ...slides[0], cover: cover ?? slides[0].cover }]
+    : slides
 
   useEffect(() => {
     if (!autoplay) return
@@ -34,21 +47,21 @@ export function HeroCarousel() {
 
   return (
     <section
-      aria-roledescription="carrossel"
-      aria-label="Empreendimentos em destaque"
+      aria-roledescription={compact ? undefined : 'carrossel'}
+      aria-label={compact ? title ?? 'Empreendimentos' : 'Empreendimentos em destaque'}
       className="frame-x bg-page pb-0"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onFocus={() => setHovering(true)}
       onBlur={() => setHovering(false)}
     >
-      <div className="on-dark relative h-[calc(100svh-5rem-1rem)] min-h-[560px] overflow-hidden bg-ink text-white md:h-[calc(100svh-5rem-2rem)]">
-        {slides.map((s, i) => (
+      <div className={`on-dark relative overflow-hidden bg-ink text-white ${compact ? 'h-[clamp(20rem,calc((100svh-6rem)/2),35rem)]' : 'h-[calc(100svh-5rem-1rem)] min-h-[560px] md:h-[calc(100svh-5rem-2rem)]'}`}>
+        {imageSlides.map((s, i) => (
           <div
             key={s.slug}
             role="group"
             aria-roledescription="slide"
-            aria-label={`${i + 1} de ${slides.length}: ${s.name}`}
+            aria-label={`${i + 1} de ${imageSlides.length}: ${s.name}`}
             aria-hidden={i !== active}
             className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${i === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
           >
@@ -56,11 +69,11 @@ export function HeroCarousel() {
           </div>
         ))}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
-        <ProvisionalTag className="absolute left-4 top-4 md:left-6 md:top-6" />
+        {compact && <ProvisionalTag className="absolute left-4 top-4 md:left-6 md:top-6" />}
 
-        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-6 p-5 md:flex-row md:items-end md:justify-between md:p-10">
+        <div className={`absolute inset-x-0 bottom-0 flex flex-col md:flex-row md:items-end md:justify-between ${compact ? 'gap-3 p-5 md:gap-5 md:p-8' : 'gap-6 p-5 md:p-10'}`}>
           {/* Controles: acima do texto no celular, à direita no desktop */}
-          <div className="order-first flex items-center gap-4 md:order-last md:flex-col md:items-end md:gap-5">
+          {!compact && <div className="order-first flex items-center gap-4 md:order-last md:flex-col md:items-end md:gap-5">
             <ul className="flex flex-wrap gap-x-5 gap-y-1 md:flex-col md:items-end md:gap-2">
               {slides.map((s, i) => (
                 <li key={s.slug}>
@@ -89,17 +102,21 @@ export function HeroCarousel() {
                 )}
               </button>
             )}
-          </div>
+          </div>}
 
           <div className="max-w-md" aria-live={autoplay ? 'off' : 'polite'}>
-            <h1 className="text-4xl md:text-6xl">{slides[active].name}</h1>
-            <p className="mt-3 text-sm leading-relaxed text-white/85 md:text-base">{slides[active].summary}</p>
-            <Link
-              to={projectHref(slides[active])}
-              className="mt-6 inline-flex h-[34px] items-center border border-white bg-black/15 px-3 text-[11px] text-white hover:bg-white/15"
-            >
-              Conhecer o projeto
-            </Link>
+            <h1 className="text-4xl md:text-6xl">{title ?? slides[active].name}</h1>
+            <p className="mt-3 text-sm leading-relaxed text-white/85 md:text-base">
+              {description ?? slides[active].summary}
+            </p>
+            {!compact && (
+              <Link
+                to={projectHref(slides[active])}
+                className="mt-6 inline-flex h-[34px] items-center border border-white bg-black/15 px-3 text-[11px] text-white hover:bg-white/15"
+              >
+                Conhecer o projeto
+              </Link>
+            )}
           </div>
         </div>
       </div>

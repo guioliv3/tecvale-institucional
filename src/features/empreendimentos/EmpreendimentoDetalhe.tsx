@@ -8,20 +8,21 @@ import { PlanDiagram } from './PlanDiagram'
 // Layout reutilizável. Cada bloco só aparece quando há conteúdo.
 export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento }) {
   const contato = `/contato?empreendimento=${p.slug}`
+  const location = [p.neighborhood, p.city].filter(Boolean).join(' · ')
   const quick = [
-    ['Bairro', p.neighborhood],
-    ['Status', p.status],
-    ['Dormitórios', p.bedrooms],
-    ['Área privativa', p.area],
+    ['Etapa', p.status],
+    ...(p.bedrooms ? [['Tipologia', p.bedrooms]] : []),
+    ...(p.area ? [[p.areaLabel ?? 'Área privativa', p.area]] : []),
+    ...(p.deliveryDate ? [['Entrega', p.deliveryDate]] : []),
   ]
   return (
     <>
       <section aria-labelledby="titulo" className="frame-x">
         <div className="on-dark relative h-[70svh] min-h-[420px] overflow-hidden bg-ink text-white md:h-[calc(100svh-7rem)]">
-          <Photo photo={p.cover} className="h-full" eager />
+          <Photo photo={p.cover} className="h-full" tag={false} eager />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-5 md:p-10">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/80">{p.status} · {p.neighborhood}</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-white/80">{p.status}{location && ` · ${location}`}</p>
             <h1 id="titulo" className="mt-3 text-5xl md:text-8xl">{p.name}</h1>
           </div>
         </div>
@@ -81,7 +82,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
           <div className="frame-x mx-auto max-w-[1600px]">
             <Eyebrow>Plantas</Eyebrow>
             <h2 className="mt-4 text-3xl md:text-5xl">Opções de planta</h2>
-            <p className="mt-3 text-sm text-muted">Esquemas provisórios; plantas oficiais serão inseridas.</p>
+            <p className="mt-3 text-sm text-muted">Consulte os formatos de planta divulgados para este empreendimento.</p>
             <ul className="mt-10 grid gap-6 md:grid-cols-3">
               {p.plans.map((pl) => (
                 <li key={pl.name} className="bg-page p-6">
@@ -99,10 +100,15 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
         <div className="md:col-span-5">
           <Eyebrow>Ficha técnica</Eyebrow>
           <h2 className="mt-4 text-3xl md:text-5xl">Em números</h2>
-          <p className="mt-3 text-sm text-muted">Dados de demonstração.</p>
+          <p className="mt-3 text-sm text-muted">Informações conforme publicadas pela Tecvale.</p>
         </div>
         <dl className="md:col-span-6 md:col-start-7">
-          {[...p.specs, { label: 'Localização', value: `${p.neighborhood}, ${p.city}` }].map((s) => (
+          {[
+            ...p.specs,
+            ...(location && !p.specs.some((spec) => spec.label === 'Localização')
+              ? [{ label: 'Localização', value: location }]
+              : []),
+          ].map((s) => (
             <div key={s.label} className="flex justify-between gap-6 border-b border-ink/15 py-4">
               <dt className="text-sm text-muted">{s.label}</dt>
               <dd className="text-right">{s.value}</dd>

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { empreendimentos } from "@/content/empreendimentos";
+import { getEmpreendimento } from "@/content/empreendimentos";
 import { ContactForm } from "@/features/contato/ContactForm";
 
 const siteUrl = "https://tecvaleconstrutora.com.br";
@@ -16,7 +16,7 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
   "/empreendimentos": {
     title: "Empreendimentos | Tecvale Construtora",
     description:
-      "Explore os empreendimentos residenciais da Tecvale em Jacareí e São José dos Campos.",
+      "Explore os empreendimentos da Tecvale em obras e entregues, com localização, tipologia, área e etapa.",
   },
   "/sobre": {
     title: "Sobre a Tecvale | Construtora e Incorporadora",
@@ -34,16 +34,14 @@ export function RootLayout() {
   const { pathname, search } = useLocation();
   const selectedProject =
     pathname === "/contato"
-      ? empreendimentos.find(
-          ({ slug }) => slug === new URLSearchParams(search).get("empreendimento"),
-        )
+      ? getEmpreendimento(new URLSearchParams(search).get("empreendimento") ?? undefined)
       : undefined;
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
   useEffect(() => {
     const project = pathname.startsWith("/empreendimentos/")
-      ? empreendimentos.find(({ slug }) => pathname.endsWith(`/${slug}`))
+      ? getEmpreendimento(pathname.split("/").filter(Boolean).at(-1))
       : undefined;
     const metadata = project
       ? { title: `${project.name} | Tecvale`, description: project.summary }
@@ -64,7 +62,7 @@ export function RootLayout() {
     document
       .querySelector('meta[name="twitter:description"]')
       ?.setAttribute("content", metadata.description);
-    const socialImageUrl = new URL(project?.cover.src ?? "/images/ares.jpg", siteUrl).href;
+    const socialImageUrl = new URL(project?.cover.src ?? "/images/neori-interior-option.jpg", siteUrl).href;
     const socialImageAlt =
       project?.cover.alt ?? "Imagem ilustrativa de empreendimento residencial da Tecvale";
     document.querySelector('meta[property="og:image"]')?.setAttribute("content", socialImageUrl);

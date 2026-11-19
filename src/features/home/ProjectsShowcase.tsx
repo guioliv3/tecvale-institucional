@@ -5,7 +5,7 @@ import { Photo } from '@/components/ui/Photo'
 import { TextLink } from '@/components/ui/TextLink'
 
 type ProjectsShowcaseProps = {
-  /** Lista recebida pela interface; por padrão, usa os mocks locais. */
+  /** Lista recebida pela interface; por padrão, usa os projetos em obras. */
   projects?: Empreendimento[]
 }
 
@@ -58,7 +58,7 @@ export function ProjectsShowcase({ projects = empreendimentos }: ProjectsShowcas
               </p>
               <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-t border-ink/15 pt-4 text-xs">
                 <div className="flex gap-1.5">
-                  <dt className="text-muted">Unidades</dt>
+                  <dt className="text-muted">Tipologia</dt>
                   <dd>{project.bedrooms}</dd>
                 </div>
                 <div className="flex gap-1.5">

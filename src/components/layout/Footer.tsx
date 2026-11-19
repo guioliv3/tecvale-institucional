@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { nav, office } from '@/content/site'
-import { empreendimentos } from '@/content/empreendimentos'
+import { portfolioEmpreendimentos } from '@/content/empreendimentos'
 import { Brand } from './Header'
 
 export function Footer() {
@@ -16,7 +16,7 @@ export function Footer() {
         <div>
           <h2 className="font-sans text-xs font-medium uppercase tracking-[0.2em] text-white">Empreendimentos</h2>
           <ul className="mt-4 space-y-2 text-sm">
-            {empreendimentos.map((e) => (
+            {portfolioEmpreendimentos.map((e) => (
               <li key={e.slug}><Link className="hover:text-white" to={`/empreendimentos/${e.slug}`}>{e.name}</Link></li>
             ))}
           </ul>

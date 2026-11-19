@@ -4,47 +4,40 @@ import { Photo } from "@/components/ui/Photo";
 import { img } from "@/content/empreendimentos";
 
 const milestones = [
-  { year: "2009", detail: "Julho", name: "Mirante do Vale", image: "concreto.jpg" },
+  { year: "2009", detail: "Julho", name: "Mirante do Vale", image: "mirante-do-vale.png" },
   {
     year: "2012",
     detail: "Agosto",
     name: "Condomínio Mirante do Vale",
-    image: "fachada-1.jpg",
+    image: "condominio-mirante-do-vale.png",
   },
-  { year: "2014", detail: "Setembro", name: "Residencial Johanna", image: "casa-1.jpg" },
-  { year: "2017", detail: "Setembro", name: "Maison Soraya", image: "sala-1.jpg" },
+  { year: "2014", detail: "Setembro", name: "Residencial Johanna", image: "residencial-johanna.jpg" },
+  { year: "2017", detail: "Setembro", name: "Maison Soraya", image: "maison-soraya.jpg" },
   {
     year: "2019",
     detail: "Maio",
     name: "Residencial Antonio de Vimioso",
-    image: "casa-2.jpg",
+    image: "antonio-de-vimioso.jpg",
   },
   {
     year: "2021",
     detail: "Agosto",
     name: "Green Life Villa Branca",
-    image: "fachada-1.jpg",
+    image: "green-life-interior-option.jpg",
   },
-  { year: "2023", detail: "Outubro", name: "Believe Residence", image: "ares.jpg" },
+  { year: "2023", detail: "Outubro", name: "Believe Residence", image: "believe-residence.jpg" },
   {
     year: "Em obras",
     detail: "Em andamento",
     name: "Neori Residence",
-    image: "neori.jpg",
+    image: "neori-interior-option.jpg",
     current: true,
   },
   {
     year: "Em obras",
     detail: "Em andamento",
     name: "Noah Residence",
-    image: "noah.jpg",
-    current: true,
-  },
-  {
-    year: "Em obras",
-    detail: "Em andamento",
-    name: "Ares Aquarius",
-    image: "ares.jpg",
+    image: "noah-residence.jpg",
     current: true,
   },
 ];
@@ -142,9 +135,10 @@ export function TrajectoryTimeline() {
                       <Photo
                         photo={{
                           src: img(milestone.image),
-                          alt: `Imagem ilustrativa de arquitetura para ${milestone.name}`,
+                          alt: `${milestone.name}, imagem oficial da Tecvale`,
                         }}
                         className="aspect-[16/10]"
+                        tag={false}
                       />
                     </ImageHoverLink>
                   </div>
@@ -170,9 +164,10 @@ export function TrajectoryTimeline() {
                       <Photo
                         photo={{
                           src: img(milestone.image),
-                          alt: `Imagem ilustrativa de arquitetura para ${milestone.name}`,
+                          alt: `${milestone.name}, imagem oficial da Tecvale`,
                         }}
                         className="aspect-[16/10]"
+                        tag={false}
                       />
                     </ImageHoverLink>
                   </div>

@@ -2,7 +2,7 @@ import { getEmpreendimento } from "@/content/empreendimentos";
 import { ProvisionalTag } from "@/components/ui/ProvisionalTag";
 import { TextLink } from "@/components/ui/TextLink";
 
-const cover = getEmpreendimento("ares-aquarius")!.cover;
+const cover = getEmpreendimento("neori-residence")!.cover;
 
 export function SobreHero() {
   return (
