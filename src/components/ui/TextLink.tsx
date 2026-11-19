@@ -13,7 +13,7 @@ export function TextLink({
   return (
     <Link
       to={to}
-      className={`group inline-flex items-center gap-1.5 pb-1 text-[13px] transition-colors ${variant === "light" ? "text-white hover:text-white/75" : "text-wine hover:text-wine-dark"}`}
+      className={`group inline-flex cursor-pointer items-center gap-1.5 pb-1 text-[13px] transition-colors ${variant === "light" ? "text-white hover:text-white/75" : "text-wine hover:text-wine-dark"}`}
     >
       <span className="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform group-hover:after:scale-x-100 motion-reduce:after:transition-none">
         {children}

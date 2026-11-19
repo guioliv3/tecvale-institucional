@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { FloatingWhatsApp } from "./FloatingWhatsApp";
 import { getEmpreendimento } from "@/content/empreendimentos";
 
 const siteUrl = "https://tecvaleconstrutora.com.br";
@@ -115,6 +116,7 @@ export function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }

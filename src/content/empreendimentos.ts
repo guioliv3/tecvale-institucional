@@ -3,8 +3,25 @@
 /** Resolve um arquivo de public/images respeitando a base do Vite. */
 export const img = (file: string) => `${import.meta.env.BASE_URL}images/${file}`
 
-export type Plan = { name: string; area: string; bedrooms: number; suites: number }
 export type Photo = { src: string; alt: string }
+export type Plan = {
+  name: string
+  area: string
+  bedrooms: number
+  suites: number
+  image?: Photo
+  details?: string[]
+}
+export type ProjectMilestone = {
+  title: string
+  date?: string
+  status: 'Concluída' | 'Em andamento' | 'Prevista'
+}
+export type ProjectProgress = {
+  summary?: string
+  updatedAt?: string
+  milestones?: ProjectMilestone[]
+}
 
 export type Empreendimento = {
   slug: string
@@ -14,16 +31,23 @@ export type Empreendimento = {
   presentation: string[]
   neighborhood: string
   city: string
+  address?: string
+  locationContext?: string
+  mapUrl?: string
   status: 'Lançamento' | 'Em obras' | 'Entregue'
   bedrooms: string
   area: string
+  parking?: string
   areaLabel?: string
   deliveryDate?: string
+  progress?: ProjectProgress
   cover: Photo
   gallery: Photo[]
+  featuresImage?: Photo
   plans: Plan[]
   features: { title: string; text: string }[]
   specs: { label: string; value: string }[]
+  relatedSlugs?: string[]
 }
 
 export const empreendimentos: Empreendimento[] = [
@@ -38,6 +62,7 @@ export const empreendimentos: Empreendimento[] = [
     ],
     neighborhood: 'Jardim Aquarius',
     city: 'São José dos Campos, SP',
+    parking: '2 por unidade',
     status: 'Em obras',
     bedrooms: '3 dormitórios',
     area: '86,6 m²',
@@ -67,6 +92,8 @@ export const empreendimentos: Empreendimento[] = [
     ],
     neighborhood: 'Vila Adyanna',
     city: 'São José dos Campos, SP',
+    locationContext: 'Próximo aos parques Vicentina Aranha e Santos Dumont, ao Tênis Clube e aos serviços das avenidas Adhemar de Barros, Nove de Julho, São João e Anchieta.',
+    parking: '1 vaga privativa por apartamento',
     status: 'Em obras',
     bedrooms: '2 dormitórios, 1 suíte',
     area: 'A partir de 76 m²',
@@ -90,24 +117,77 @@ const empreendimentosLancamentos: Empreendimento[] = [
   {
     slug: 'ares-aquarius',
     name: 'Ares Aquarius',
-    tagline: 'Um novo endereço no Jardim Aquarius.',
-    summary: 'Torre única com 60 apartamentos de 3 dormitórios, no Jardim Aquarius.',
+    tagline: 'Apartamentos de 3 dormitórios, com lazer em dois pavimentos.',
+    summary: '60 apartamentos em torre única, com 1 suíte, 2 vagas e plantas de 102,14 m² e 105,82 m².',
     presentation: [
-      'O Ares Aquarius é um novo empreendimento da Tecvale no Jardim Aquarius, em São José dos Campos. A apresentação da construtora informa uma torre única com 60 apartamentos de 3 dormitórios e vistas para as serras da Mantiqueira e do Mar.',
+      'No endereço Rua Itajaí, 30, no Jardim Aquarius, em São José dos Campos, o Ares Aquarius reúne 60 apartamentos em torre única. São 15 pavimentos residenciais, com quatro unidades por andar.',
+      'As duas plantas têm 3 dormitórios, sendo 1 suíte, e 2 vagas de garagem. A opção de 102,14 m² corresponde aos finais 1 e 3; a de 105,82 m², aos finais 2 e 4. Ambas incluem varanda gourmet de 11,38 m² e varanda técnica de 4,18 m², reversível para área de serviço.',
     ],
     neighborhood: 'Jardim Aquarius',
     city: 'São José dos Campos, SP',
+    address: 'Rua Itajaí, 30',
+    locationContext: 'O entorno reúne referências como Colinas Shopping, Praça Ulisses Guimarães, Oba Hortifruti, Pão de Açúcar e Avenida Cassiano Ricardo.',
+    mapUrl: 'https://www.google.com/maps?q=Ares+Aquarius+-+TECVALE,+Rua+Itaja%C3%AD+30,+Jardim+Aquarius,+S%C3%A3o+Jos%C3%A9+dos+Campos&t=k&z=18',
     status: 'Lançamento',
-    bedrooms: '3 dormitórios',
-    area: '',
-    cover: { src: img('ares.jpg'), alt: 'Imagem de divulgação do Ares Aquarius' },
-    gallery: [],
-    plans: [],
-    features: [],
+    bedrooms: '3 dormitórios, 1 suíte',
+    area: '102,14 m² e 105,82 m²',
+    areaLabel: 'Área privativa',
+    parking: '2 vagas por unidade',
+    cover: { src: img('TEC_ITA_05_FACHADA 03_EF2.jpg'), alt: 'Fachada do Ares Aquarius ao entardecer, em São José dos Campos' },
+    gallery: [
+      { src: img('ares-mockup-living.png'), alt: 'Mockup ilustrativo de living para o Ares Aquarius' },
+      { src: img('ares-mockup-varanda.png'), alt: 'Mockup ilustrativo de varanda para o Ares Aquarius' },
+      { src: img('ares-mockup-bedroom.png'), alt: 'Mockup ilustrativo de dormitório para o Ares Aquarius' },
+    ],
+    featuresImage: { src: img('ares-mockup-lounge.png'), alt: 'Mockup ilustrativo de ambiente comum para o Ares Aquarius' },
+    plans: [
+      {
+        name: '102,14 m² · finais 1 e 3',
+        area: '102,14 m²',
+        bedrooms: 3,
+        suites: 1,
+        image: { src: img('ares-planta-102-14.webp'), alt: 'Planta ilustrada do apartamento de 102,14 m², finais 1 e 3' },
+        details: [
+          '3 dormitórios, sendo 1 suíte',
+          'Sala de estar e jantar e cozinha',
+          'Lavabo e banheiro social',
+          'Varanda técnica de 4,18 m², reversível para área de serviço',
+          'Varanda gourmet de 11,38 m²',
+          '2 vagas de garagem',
+        ],
+      },
+      {
+        name: '105,82 m² · finais 2 e 4',
+        area: '105,82 m²',
+        bedrooms: 3,
+        suites: 1,
+        image: { src: img('ares-planta-105-82.webp'), alt: 'Planta ilustrada do apartamento de 105,82 m², finais 2 e 4' },
+        details: [
+          '3 dormitórios, sendo 1 suíte',
+          'Hall de entrada',
+          'Sala de estar e jantar e cozinha',
+          'Lavabo e banheiro social',
+          'Varanda técnica de 4,18 m², reversível para área de serviço',
+          'Varanda gourmet de 11,38 m²',
+          '2 vagas de garagem',
+        ],
+      },
+    ],
+    features: [
+      { title: 'Brises móveis', text: 'Os painéis da fachada permitem ajustar a entrada de luz natural e a privacidade na varanda.' },
+      { title: 'Praça e conveniência no térreo', text: 'Praça central com cascata, coworking, sala de reunião e videoconferência, espaço para encomendas e pontos de recarga para veículos elétricos.' },
+      { title: 'Lazer no 16º pavimento', text: 'Salão de festas com espaço gourmet, dois belvederes, salão de jogos com American Bar e Game Station, Espaço Kids, Pet Place e Pet Care.' },
+      { title: 'Lazer no 17º pavimento', text: 'Piscinas climatizadas para adultos e crianças, deck solário, espaço gourmet com churrasqueira, fitness, espaço de estética, Espaço Zen com ofurô, sala de massagem e sauna.' },
+    ],
     specs: [
       { label: 'Unidades', value: '60 apartamentos' },
-      { label: 'Tipologia', value: '3 dormitórios' },
       { label: 'Torre', value: 'Única' },
+      { label: 'Pavimentos residenciais', value: '15' },
+      { label: 'Unidades por andar', value: '4' },
+      { label: 'Tipologia', value: '3 dormitórios, 1 suíte' },
+      { label: 'Vagas', value: '2 por unidade' },
+      { label: 'Varanda gourmet', value: '11,38 m²' },
+      { label: 'Varanda técnica', value: '4,18 m², reversível para área de serviço' },
     ],
   },
 ]
@@ -180,6 +260,7 @@ const empreendimentosEntregues: Empreendimento[] = [
     ],
     neighborhood: 'Jardim Paraíso',
     city: 'São José dos Campos, SP',
+    locationContext: 'A uma quadra do Shopping Oriente e do supermercado Shibata.',
     status: 'Entregue',
     bedrooms: 'Apartamentos',
     area: '',

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
-import { empreendimentos, projectHref, type Photo } from '@/content/empreendimentos'
+import { portfolioEmpreendimentos, projectHref, type Empreendimento, type Photo } from '@/content/empreendimentos'
 import { ProvisionalTag } from '@/components/ui/ProvisionalTag'
+import { TextLink } from '@/components/ui/TextLink'
 
 // Projetos atualmente em obras, na ordem de destaque da Home.
-const order = ['neori-residence', 'noah']
-const slides = order.flatMap((s) => empreendimentos.filter((e) => e.slug === s))
+const order = ['neori-residence', 'noah', 'ares-aquarius']
+const slides = order
+  .map((slug) => portfolioEmpreendimentos.find((project) => project.slug === slug))
+  .filter((project): project is Empreendimento => project !== undefined)
 const INTERVAL = 7000
 
 function usePrefersReducedMotion() {
@@ -110,12 +112,9 @@ export function HeroCarousel({
               {description ?? slides[active].summary}
             </p>
             {!compact && (
-              <Link
-                to={projectHref(slides[active])}
-                className="mt-6 inline-flex h-[34px] items-center border border-white bg-black/15 px-3 text-[11px] text-white hover:bg-white/15"
-              >
-                Conhecer o projeto
-              </Link>
+              <div className="mt-6">
+                <TextLink to={projectHref(slides[active])} variant="light">Conhecer o projeto</TextLink>
+              </div>
             )}
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { img } from '@/content/empreendimentos'
 import { ProvisionalTag } from '@/components/ui/ProvisionalTag'
 
@@ -16,6 +16,7 @@ const items = [
 
 export function GalleryCarousel() {
   const scroller = useRef<HTMLDivElement>(null)
+  const drag = useRef<{ pointerId: number; x: number; scrollLeft: number } | null>(null)
   const [thumb, setThumb] = useState({ width: 50, left: 0 })
 
   useEffect(() => {
@@ -35,14 +36,37 @@ export function GalleryCarousel() {
     }
   }, [])
 
+  function startDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.pointerType === 'mouse' && event.button !== 0) return
+    drag.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      scrollLeft: event.currentTarget.scrollLeft,
+    }
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  function dragCarousel(event: ReactPointerEvent<HTMLDivElement>) {
+    if (drag.current?.pointerId !== event.pointerId) return
+    event.currentTarget.scrollLeft = drag.current.scrollLeft - (event.clientX - drag.current.x)
+  }
+
+  function endDrag() {
+    drag.current = null
+  }
+
   return (
     <section aria-label="Galeria de imagens" className="pb-20 md:pb-32">
       <div
         ref={scroller}
         tabIndex={0}
         role="region"
-        aria-label="Galeria rolável; use as setas do teclado para navegar"
-        className="frame-x flex snap-x snap-mandatory items-start gap-4 overflow-x-auto pb-2 [scrollbar-width:none] md:gap-8 [&::-webkit-scrollbar]:hidden"
+        aria-label="Galeria horizontal de imagens"
+        onPointerDown={startDrag}
+        onPointerMove={dragCarousel}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className="frame-x flex touch-pan-y snap-x snap-mandatory cursor-grab select-none items-start gap-4 overflow-x-auto pb-2 [scrollbar-width:none] active:cursor-grabbing md:gap-8 [&::-webkit-scrollbar]:hidden"
       >
         {items.map((it) => (
           <figure
@@ -50,7 +74,7 @@ export function GalleryCarousel() {
             className={`relative w-[62vw] shrink-0 snap-start overflow-hidden bg-surface md:w-[calc((100vw-4rem-8rem)/5)] ${it.offset}`}
             style={{ aspectRatio: it.ratio }}
           >
-            <img src={img(it.file)} alt={it.alt} loading="lazy" className="h-full w-full object-cover" />
+            <img src={img(it.file)} alt={it.alt} draggable={false} loading="lazy" className="h-full w-full object-cover" />
             <ProvisionalTag className="absolute left-2 top-2 !text-[9px]">Provisória</ProvisionalTag>
           </figure>
         ))}

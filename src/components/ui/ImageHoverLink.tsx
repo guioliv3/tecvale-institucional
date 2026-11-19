@@ -16,6 +16,7 @@ export function ImageHoverLink({
   return (
     <Link
       to={to}
+      draggable={false}
       onPointerMove={(event) => {
         if (event.pointerType !== "mouse" || !cursor.current) return;
         const bounds = event.currentTarget.getBoundingClientRect();

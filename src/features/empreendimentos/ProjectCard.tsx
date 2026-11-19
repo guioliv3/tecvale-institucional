@@ -1,10 +1,10 @@
 import { Link } from 'react-router'
 import { Photo } from '@/components/ui/Photo'
 import { TextLink } from '@/components/ui/TextLink'
-import type { Empreendimento } from '@/content/empreendimentos'
+import { projectHref, type Empreendimento } from '@/content/empreendimentos'
 
 export function ProjectCard({ projeto: p }: { projeto: Empreendimento }) {
-  const href = `/empreendimentos/${p.slug}`
+  const href = projectHref(p)
   const location = [p.neighborhood, p.city].filter(Boolean).join(' · ')
 
   return (

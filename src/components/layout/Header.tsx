@@ -47,7 +47,7 @@ export function Header() {
           <span className={`h-px bg-ink transition-[width,transform,background-color] duration-200 ease-out group-hover:bg-wine ${open ? 'w-6 -translate-y-[4px] -rotate-45' : 'w-7'}`} />
         </button>
         <Link to="/" aria-label="Tecvale, página inicial" className="justify-self-center">
-          <img src="/images/logo-tecvale-preto.svg" alt="Tecvale" className="w-32 md:w-40" />
+          <img src="/images/logo-tecvale-vermelho.svg" alt="Tecvale" className="w-32 md:w-40" />
         </Link>
         <button
           type="button"
