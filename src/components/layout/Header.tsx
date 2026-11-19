@@ -41,10 +41,10 @@ export function Header() {
           aria-controls="menu-principal"
           aria-label={open ? 'Fechar menu' : 'Abrir menu'}
           onClick={() => setOpen((v) => !v)}
-          className="relative z-50 flex h-10 w-10 flex-col items-start justify-center gap-2"
+          className="group relative z-50 flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-2 transition-colors hover:text-wine active:scale-95"
         >
-          <span className={`h-px bg-ink transition-all ${open ? 'w-6 translate-y-[4px] rotate-45' : 'w-7'}`} />
-          <span className={`h-px bg-ink transition-all ${open ? 'w-6 -translate-y-[4px] -rotate-45' : 'w-7'}`} />
+          <span className={`h-px bg-ink transition-[width,transform,background-color] duration-200 ease-out group-hover:bg-wine ${open ? 'w-6 translate-y-[4px] rotate-45' : 'w-7'}`} />
+          <span className={`h-px bg-ink transition-[width,transform,background-color] duration-200 ease-out group-hover:bg-wine ${open ? 'w-6 -translate-y-[4px] -rotate-45' : 'w-7'}`} />
         </button>
         <Link to="/" aria-label="Tecvale, página inicial" className="justify-self-center">
           <img src="/images/logo-tecvale-preto.svg" alt="Tecvale" className="w-32 md:w-40" />
@@ -52,16 +52,16 @@ export function Header() {
         <button
           type="button"
           aria-label="Idioma: português e inglês"
-          className="justify-self-end text-xs uppercase tracking-[0.12em]"
+          className="group justify-self-end cursor-pointer text-xs uppercase tracking-[0.12em] transition-transform active:scale-95"
         >
-          <span className="text-ink">PT</span>
+          <span className="text-ink transition-colors group-hover:text-wine">PT</span>
           <span aria-hidden="true" className="mx-2 text-muted">|</span>
-          <span className="text-muted">ENG</span>
+          <span className="text-muted transition-colors group-hover:text-wine">ENG</span>
         </button>
       </div>
 
       {open && (
-        <nav id="menu-principal" aria-label="Principal" className="fixed inset-0 z-40 overflow-y-auto bg-page pt-24">
+        <nav id="menu-principal" aria-label="Principal" className="menu-enter fixed inset-x-0 bottom-0 top-20 z-40 overflow-y-auto bg-page pt-4">
           <ul className="frame-x mx-auto flex max-w-5xl flex-col gap-2 py-8">
             {nav.map((item) => (
               <li key={item.to}>
