@@ -6,6 +6,14 @@ export const nav = [
   { label: 'Empreendimentos', to: '/empreendimentos' },
   { label: 'Sobre', to: '/sobre' },
   { label: 'Contato', to: '/contato' },
+  { label: 'Dúvidas frequentes', to: '/contato#faq' },
+  { label: 'Política de privacidade', to: '/politica-de-privacidade' },
+]
+
+export const socialLinks = [
+  { label: 'Instagram', href: 'https://instagram.com/tecvaleconstrutora' },
+  { label: 'Facebook', href: 'https://www.facebook.com/tecvaleconstrutora?locale=pt_BR' },
+  { label: 'YouTube', href: 'https://www.youtube.com/channel/UCVdBfQ5MaUpp4m5UDWaqbYQ' },
 ]
 
 export const stats = [

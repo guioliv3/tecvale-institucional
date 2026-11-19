@@ -5,6 +5,7 @@ import { office } from '@/content/site'
 import { maskPhone, validate, type ContactErrors, type ContactValues } from './validate'
 
 type ContactIntent = 'geral' | 'empreendimentos' | 'clientes'
+type ContactPreference = 'email' | 'celular'
 
 const intents: { id: ContactIntent; label: string; description: string; subject: string }[] = [
   { id: 'geral', label: 'Contato geral', description: 'Dúvidas e informações para a equipe.', subject: 'Contato geral' },
@@ -20,6 +21,7 @@ export function ContactForm({ projeto }: { projeto?: Empreendimento }) {
   const [values, setValues] = useState(empty)
   const [errors, setErrors] = useState<ContactErrors>({})
   const [intent, setIntent] = useState<ContactIntent>(projeto ? 'empreendimentos' : 'geral')
+  const [preferences, setPreferences] = useState<ContactPreference[]>([])
   const [projectSlug, setProjectSlug] = useState(projeto?.slug ?? '')
   const [contactUrl, setContactUrl] = useState('')
   const formRef = useRef<HTMLFormElement>(null)
@@ -45,6 +47,7 @@ export function ContactForm({ projeto }: { projeto?: Empreendimento }) {
     const message = [
       `Assunto: ${selectedIntent.subject}`,
       selectedProject && `Empreendimento: ${selectedProject.name}`,
+      `Preferência de retorno: ${preferences.length ? preferences.map((preference) => preference === 'email' ? 'E-mail' : 'Celular').join(' e ') : 'Sem preferência'}`,
       `Nome: ${values.nome}`,
       `Telefone: ${values.telefone}`,
       `E-mail: ${values.email}`,
@@ -178,6 +181,31 @@ export function ContactForm({ projeto }: { projeto?: Empreendimento }) {
           {errors.mensagem && <p id="mensagem-erro" className="mt-1.5 text-sm text-wine">{errors.mensagem}</p>}
         </div>
       </div>
+
+      <fieldset>
+        <legend className="text-base">Como prefere ser contatado?</legend>
+        <p className="mt-1 text-sm text-muted">Escolha quantas opções preferir.</p>
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+          {([
+            ['email', 'E-mail'],
+            ['celular', 'Celular'],
+          ] as const).map(([value, label]) => (
+            <label key={value} className="inline-flex cursor-pointer items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                name="preferencia-contato"
+                value={value}
+                checked={preferences.includes(value)}
+                onChange={(event) => setPreferences((current) => event.target.checked
+                  ? [...current, value]
+                  : current.filter((preference) => preference !== value))}
+                className="size-4 cursor-pointer accent-wine"
+              />
+              {label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <div>
         <button type="submit" className="inline-flex min-h-12 cursor-pointer items-center bg-wine px-5 text-sm text-white transition-colors hover:bg-wine-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine">

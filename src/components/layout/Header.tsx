@@ -63,7 +63,7 @@ export function Header() {
       {open && (
         <nav id="menu-principal" aria-label="Principal" className="menu-enter fixed inset-x-0 bottom-0 top-20 z-40 overflow-y-auto bg-page pt-4">
           <ul className="frame-x mx-auto flex max-w-5xl flex-col gap-2 py-8">
-            {nav.map((item) => (
+            {nav.filter((item) => item.to !== '/contato#faq' && item.to !== '/politica-de-privacidade').map((item) => (
               <li key={item.to}>
                 <NavLink
                   to={item.to}

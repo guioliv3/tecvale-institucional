@@ -8,6 +8,7 @@ const sections = [
   { id: 'mensagem', label: 'Envie uma mensagem' },
   { id: 'contato-direto', label: 'Contato direto' },
   { id: 'localizacao', label: 'Localização' },
+  { id: 'faq', label: 'Dúvidas frequentes' },
 ]
 
 function ContactIcon({ type }: { type: 'phone' | 'mail' | 'chat' | 'pin' }) {
@@ -105,6 +106,52 @@ export function Contato() {
                   referrerPolicy="no-referrer-when-downgrade"
                   className="aspect-[16/9] w-full border-0 bg-surface"
                 />
+              </div>
+            </div>
+          </section>
+
+          <section id="faq" aria-labelledby="faq-title" className="scroll-mt-28 mt-20 border-t border-ink/15 pt-8 md:mt-32 md:pt-10">
+            <div className="grid gap-8 md:grid-cols-12 md:gap-12">
+              <div className="md:col-span-4">
+                <h2 id="faq-title" className="text-3xl md:text-4xl">Dúvidas frequentes</h2>
+                <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
+                  Respostas sobre o formulário, o atendimento e o escritório da Tecvale.
+                </p>
+              </div>
+              <div className="md:col-span-8">
+                {[
+                  {
+                    question: 'Que tipo de assunto posso enviar pelo formulário?',
+                    answer: 'Você pode falar com a equipe em geral, pedir informações sobre empreendimentos ou tratar de um assunto relacionado a clientes. Selecione a opção que melhor descreve sua solicitação.',
+                  },
+                  {
+                    question: 'Como peço informações sobre um empreendimento?',
+                    answer: 'Escolha “Interesse em empreendimentos” no formulário. Você pode indicar o projeto de interesse, se já tiver um em mente; essa informação é opcional.',
+                  },
+                  {
+                    question: 'Já sou cliente. Como entro em contato?',
+                    answer: 'Selecione “Relacionamento com clientes” e descreva o que precisa. Ao continuar, o site prepara uma mensagem de e-mail para você revisar e enviar.',
+                  },
+                  {
+                    question: 'A mensagem é enviada diretamente pelo site?',
+                    answer: 'Não. O formulário abre uma mensagem preenchida no e-mail ou no WhatsApp, conforme o assunto selecionado. Você pode revisar e enviar pelo aplicativo.',
+                  },
+                  {
+                    question: 'Onde fica o escritório da Tecvale?',
+                    answer: `${office.address}, ${office.city}.`,
+                  },
+                ].map(({ question, answer }) => (
+                  <details key={question} className="group border-t border-ink/20">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-base marker:hidden hover:text-wine [&::-webkit-details-marker]:hidden md:text-lg">
+                      {question}
+                      <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" className="size-4 shrink-0 transition-transform group-open:rotate-45">
+                        <path d="M10 3v14M3 10h14" />
+                      </svg>
+                    </summary>
+                    <p className="max-w-2xl pb-5 pr-8 text-sm leading-relaxed text-muted">{answer}</p>
+                  </details>
+                ))}
+                <div className="border-t border-ink/20" />
               </div>
             </div>
           </section>

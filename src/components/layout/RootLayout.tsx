@@ -27,6 +27,11 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     description:
       "Fale com a Tecvale por telefone, e-mail, WhatsApp ou formulário e encontre o escritório em São José dos Campos.",
   },
+  "/politica-de-privacidade": {
+    title: "Política de privacidade | Tecvale",
+    description:
+      "Saiba como a Tecvale trata os dados pessoais usados no site, no formulário de contato e nos serviços externos incorporados.",
+  },
 };
 
 export function RootLayout() {
