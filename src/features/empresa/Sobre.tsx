@@ -59,7 +59,7 @@ export function Sobre() {
       </div>
       <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-10 md:pb-36 md:pt-16">
         <div className="grid gap-10 md:grid-cols-[150px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-8">
-          <div className="md:sticky md:top-32 md:h-fit">
+          <div className="min-w-0 md:sticky md:top-32 md:h-fit">
             <PageSectionNav title="A Tecvale" sections={sections} visible={menuVisible} />
           </div>
 
@@ -196,7 +196,7 @@ export function Sobre() {
                   <TextLink to="/empreendimentos">Ver empreendimentos</TextLink>
                 </div>
               </div>
-              <dl className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-8">
+              <dl className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-8">
                 {[
                   { value: 17, suffix: "+", label: "Anos de mercado" },
                   { value: 9, suffix: "+", label: "Empreendimentos lançados" },

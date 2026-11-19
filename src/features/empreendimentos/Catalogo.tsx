@@ -74,7 +74,7 @@ export function Catalogo() {
 
       <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-14 md:pb-36 md:pt-24">
         <div className="grid gap-12 md:grid-cols-[180px_minmax(0,1fr)] md:gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12">
-          <aside className="md:sticky md:top-32 md:h-fit">
+          <aside className="min-w-0 md:sticky md:top-32 md:h-fit">
             <PageSectionNav
               title="Empreendimentos"
               sections={filteredStages.map(({ id, title }) => ({ id, label: title }))}
@@ -102,7 +102,7 @@ export function Catalogo() {
                         type="button"
                         aria-pressed={selected}
                         onClick={() => toggleFilter(filter.id)}
-                        className={`cursor-pointer px-3 py-2 text-sm transition-colors hover:text-wine hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine ${selected ? 'text-wine underline underline-offset-4' : 'text-ink'}`}
+                        className={`min-h-11 cursor-pointer px-3 py-2 text-sm transition-colors hover:text-wine hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine ${selected ? 'text-wine underline underline-offset-4' : 'text-ink'}`}
                       >
                         {filter.label}
                       </button>
@@ -118,7 +118,7 @@ export function Catalogo() {
                         type="button"
                         onClick={() => toggleFilter(filter.id)}
                         aria-label={`Remover filtro ${filter.label}`}
-                        className="inline-flex cursor-pointer items-center gap-2 rounded-none bg-ink/5 px-3 py-1.5 text-xs text-muted transition-colors hover:bg-ink/10 hover:text-wine"
+                        className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-none bg-ink/5 px-3 py-2 text-xs text-muted transition-colors hover:bg-ink/10 hover:text-wine"
                       >
                         {filter.label}<span aria-hidden="true">×</span>
                       </button>
@@ -126,7 +126,7 @@ export function Catalogo() {
                     <button
                       type="button"
                       onClick={() => setSelectedFilters([])}
-                      className="cursor-pointer px-2 py-1.5 text-xs text-wine underline underline-offset-4 transition-colors hover:text-ink"
+                      className="min-h-11 cursor-pointer px-2 py-2 text-xs text-wine underline underline-offset-4 transition-colors hover:text-ink"
                     >
                       Limpar filtros
                     </button>

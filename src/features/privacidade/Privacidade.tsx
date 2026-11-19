@@ -13,7 +13,7 @@ const sections = [
   { id: 'alteracoes', label: 'Alterações desta política' },
 ]
 
-const bodyClass = 'mt-5 max-w-3xl space-y-4 text-sm leading-relaxed text-muted md:text-base'
+const bodyClass = 'mt-5 max-w-3xl space-y-4 text-base leading-relaxed text-muted'
 
 export function Privacidade() {
   return (
@@ -27,12 +27,12 @@ export function Privacidade() {
       </header>
 
       <div className="grid gap-10 border-t border-ink/15 pt-8 md:grid-cols-[180px_minmax(0,1fr)] md:gap-8 md:pt-10">
-        <div className="md:sticky md:top-32 md:h-fit">
+        <div className="min-w-0 md:sticky md:top-32 md:h-fit">
           <PageSectionNav title="Nesta política" sections={sections} visible />
         </div>
 
         <article className="min-w-0">
-          <p className="max-w-3xl text-sm leading-relaxed text-muted md:text-base">
+          <p className="max-w-3xl text-base leading-relaxed text-muted">
             Esta Política de Privacidade descreve como a TECVALE CONSTRUTORA E INCORPORADORA LTDA., CNPJ 15.479.721/0001-01 ("Controlador"), coleta, utiliza, armazena e protege os dados pessoais dos usuários ("Titular") por meio deste site, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).
           </p>
 
@@ -46,7 +46,7 @@ export function Privacidade() {
           <section id="finalidade" aria-labelledby="finalidade-title" className="scroll-mt-28 border-t border-ink/15 py-12 md:py-16">
             <h2 id="finalidade-title" className="text-2xl md:text-4xl">2. Finalidade do tratamento</h2>
             <p className={bodyClass}>Os dados coletados são utilizados exclusivamente para:</p>
-            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted md:text-base">
+            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-base leading-relaxed text-muted">
               <li>Contato comercial direto relacionado ao empreendimento ARES Aquarius.</li>
               <li>Envio de informações detalhadas, propostas e condições comerciais.</li>
               <li>Envio de convites para eventos de lançamento e novidades sobre o empreendimento.</li>
@@ -64,7 +64,7 @@ export function Privacidade() {
           <section id="compartilhamento" aria-labelledby="compartilhamento-title" className="scroll-mt-28 border-t border-ink/15 py-12 md:py-16">
             <h2 id="compartilhamento-title" className="text-2xl md:text-4xl">4. Compartilhamento de dados</h2>
             <p className={bodyClass}>A Tecvale não comercializa nem aluga dados pessoais. O compartilhamento ocorre exclusivamente com:</p>
-            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted md:text-base">
+            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-base leading-relaxed text-muted">
               <li><span className="text-ink">Imobiliária parceira:</span> MORÁBILI GESTÃO &amp; SOLUÇÕES LTDA., CNPJ 14.511.903/0001-41, CRECI 32934-J, estritamente para viabilizar o atendimento comercial e a apresentação do empreendimento.</li>
               <li><span className="text-ink">Provedores de infraestrutura tecnológica:</span> hospedagem do site e sistemas de CRM, que também devem cumprir as diretrizes da LGPD.</li>
             </ul>
@@ -73,7 +73,7 @@ export function Privacidade() {
           <section id="cookies" aria-labelledby="cookies-title" className="scroll-mt-28 border-t border-ink/15 py-12 md:py-16">
             <h2 id="cookies-title" className="text-2xl md:text-4xl">5. Cookies e tecnologias de rastreamento</h2>
             <p className={bodyClass}>Utilizamos cookies para melhorar a experiência de navegação e analisar o tráfego do site:</p>
-            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted md:text-base">
+            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-base leading-relaxed text-muted">
               <li><span className="text-ink">Cookies essenciais:</span> necessários para o funcionamento básico do site.</li>
               <li><span className="text-ink">Cookies de desempenho e marketing:</span> Google Analytics e Meta Pixel coletam informações anônimas sobre como os visitantes utilizam o site, permitindo a otimização de campanhas de publicidade.</li>
             </ul>
@@ -90,7 +90,7 @@ export function Privacidade() {
           <section id="direitos" aria-labelledby="direitos-title" className="scroll-mt-28 border-t border-ink/15 py-12 md:py-16">
             <h2 id="direitos-title" className="text-2xl md:text-4xl">7. Direitos do titular dos dados</h2>
             <p className={bodyClass}>Em conformidade com o art. 18 da LGPD, o titular pode solicitar, a qualquer momento e gratuitamente:</p>
-            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted md:text-base">
+            <ul className="mt-5 max-w-3xl list-disc space-y-3 pl-5 text-base leading-relaxed text-muted">
               <li>A confirmação da existência de tratamento de dados.</li>
               <li>O acesso aos dados pessoais tratados.</li>
               <li>A correção de dados incompletos, inexatos ou desatualizados.</li>

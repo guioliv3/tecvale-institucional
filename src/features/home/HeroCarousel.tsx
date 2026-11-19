@@ -83,7 +83,7 @@ export function HeroCarousel({
                     type="button"
                     aria-current={i === active}
                     onClick={() => setActive(i)}
-                    className={`border-b pb-1 text-xs uppercase tracking-[0.16em] transition-opacity md:text-sm ${i === active ? 'border-white opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                    className={`min-h-11 cursor-pointer border-b py-2 text-xs uppercase tracking-[0.16em] transition-opacity md:text-sm ${i === active ? 'border-white opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
                   >
                     {s.name}
                   </button>
@@ -95,7 +95,7 @@ export function HeroCarousel({
                 type="button"
                 onClick={() => setPaused((p) => !p)}
                 aria-label={paused ? 'Retomar avanço automático' : 'Pausar avanço automático'}
-                className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center border border-white/60 hover:bg-white/15 md:ml-0"
+                className="ml-auto flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center border border-white/60 hover:bg-white/15 md:ml-0"
               >
                 {paused ? (
                   <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>

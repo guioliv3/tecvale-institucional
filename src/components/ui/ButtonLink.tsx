@@ -10,7 +10,7 @@ const styles = {
 }
 
 export function ButtonLink({ to, children, variant = 'solid', className = '' }: Props) {
-  const cls = `inline-flex h-[42px] items-center justify-center gap-4 px-4 text-[13px] transition-colors ${styles[variant]} ${className}`
+  const cls = `inline-flex min-h-11 items-center justify-center gap-4 px-4 py-2 text-[13px] transition-colors ${styles[variant]} ${className}`
   return /^https?:/.test(to) ? (
     <a href={to} className={cls} target="_blank" rel="noreferrer">{children}</a>
   ) : (

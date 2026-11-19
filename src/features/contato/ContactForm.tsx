@@ -15,7 +15,7 @@ const intents: { id: ContactIntent; label: string; description: string; subject:
 
 const empty: ContactValues = { nome: '', telefone: '', email: '', mensagem: '' }
 const fieldCls = (err?: string, quick = false) => quick
-  ? `mt-1 w-full border-0 border-b bg-transparent px-0 py-2 text-sm text-white outline-none focus:border-b-white focus:ring-0 ${err ? 'border-b-2 border-b-white' : 'border-b-white/60'}`
+  ? `mt-1 w-full border-0 border-b bg-transparent px-0 py-2 text-base text-white outline-none focus:border-b-white focus:ring-0 ${err ? 'border-b-2 border-b-white' : 'border-b-white/60'}`
   : `mt-2 w-full border bg-white px-4 py-3 text-base focus:border-wine ${err ? 'border-wine' : 'border-ink/20'}`
 
 export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimento; quick?: boolean }) {
@@ -84,7 +84,7 @@ export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimen
           <button
             type="button"
             onClick={() => setContactUrl('')}
-            className={`cursor-pointer border-b pb-1 text-sm transition-colors ${quick ? 'border-white/60 text-white hover:border-white' : 'border-ink hover:border-wine hover:text-wine'}`}
+            className={`inline-flex min-h-11 cursor-pointer items-center border-b px-1 text-sm transition-colors ${quick ? 'border-white/60 text-white hover:border-white' : 'border-ink hover:border-wine hover:text-wine'}`}
           >
             Voltar e editar
           </button>
@@ -119,7 +119,7 @@ export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimen
           {intents.map((option) => (
             <label
               key={option.id}
-              className={`cursor-pointer border-t py-4 transition-colors hover:border-wine ${intent === option.id ? 'border-wine' : 'border-ink/20'}`}
+              className={`min-h-11 cursor-pointer border-t py-4 transition-colors hover:border-wine ${intent === option.id ? 'border-wine' : 'border-ink/20'}`}
             >
               <span className="flex items-start gap-3">
                 <input
@@ -191,7 +191,7 @@ export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimen
             ['email', 'E-mail'],
             ['celular', 'Celular'],
           ] as const).map(([value, label]) => (
-            <label key={value} className="inline-flex cursor-pointer items-center gap-2 text-sm">
+            <label key={value} className="inline-flex min-h-11 cursor-pointer items-center gap-3 pr-2 text-sm">
               <input
                 type="checkbox"
                 name="preferencia-contato"
@@ -209,7 +209,7 @@ export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimen
       </fieldset>}
 
       <div className={quick ? 'flex flex-wrap items-center justify-end gap-x-4 gap-y-2' : ''}>
-        <button type="submit" className={`inline-flex cursor-pointer items-center gap-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 ${quick ? 'min-h-10 text-white hover:text-white/75 focus-visible:outline-white' : 'min-h-12 bg-wine px-5 text-white hover:bg-wine-dark focus-visible:outline-wine'}`}>
+        <button type="submit" className={`inline-flex cursor-pointer items-center gap-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 ${quick ? 'min-h-11 px-2 text-white hover:text-white/75 focus-visible:outline-white' : 'min-h-12 bg-wine px-5 text-white hover:bg-wine-dark focus-visible:outline-wine'}`}>
           {quick ? 'Enviar' : intent === 'empreendimentos' ? 'Continuar pelo WhatsApp' : 'Continuar por e-mail'}
           {quick && <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-4"><path d="M3 10h13M10 4l6 6-6 6" /></svg>}
         </button>

@@ -94,7 +94,7 @@ export function GoogleReviewsCarousel() {
           href={googleMapsUrl}
           target="_blank"
           rel="noreferrer"
-          className="border-b border-wine pb-1 text-sm text-wine transition-colors hover:text-wine-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-wine"
+          className="inline-flex min-h-11 items-center border-b border-wine text-sm text-wine transition-colors hover:text-wine-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-wine"
         >
           Ver avaliações no Google ↗
         </a>
@@ -105,7 +105,7 @@ export function GoogleReviewsCarousel() {
           type="button"
           onClick={() => move(-1)}
           aria-label="Depoimento anterior"
-          className="absolute left-0 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center border border-ink/25 bg-page transition-colors hover:border-wine hover:text-wine focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine"
+          className="absolute left-0 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 cursor-pointer place-items-center border border-ink/25 bg-page transition-colors hover:border-wine hover:text-wine focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine"
         >
           <ArrowIcon direction="previous" />
         </button>
@@ -113,7 +113,7 @@ export function GoogleReviewsCarousel() {
           type="button"
           onClick={() => move(1)}
           aria-label="Próximo depoimento"
-          className="absolute right-0 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center border border-ink/25 bg-page transition-colors hover:border-wine hover:text-wine focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine"
+          className="absolute right-0 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 cursor-pointer place-items-center border border-ink/25 bg-page transition-colors hover:border-wine hover:text-wine focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine"
         >
           <ArrowIcon direction="next" />
         </button>

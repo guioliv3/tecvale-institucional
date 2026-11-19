@@ -195,7 +195,7 @@ function StepButton({
       type="button"
       aria-current={active ? "step" : undefined}
       onClick={onClick}
-      className="group text-left"
+      className="group min-h-11 w-full cursor-pointer py-2 text-left"
     >
       <span className="block font-serif text-2xl leading-tight text-wine md:text-3xl">
         {milestone.current ? milestone.detail : `${milestone.detail} de ${milestone.year}`}

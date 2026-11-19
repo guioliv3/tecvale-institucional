@@ -37,13 +37,13 @@ export function Contato() {
       </header>
 
       <div className="grid gap-10 border-t border-ink/15 pt-8 md:grid-cols-[150px_minmax(0,1fr)] md:gap-6 md:pt-10 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-8">
-        <div className="md:sticky md:top-32 md:h-fit">
+        <div className="min-w-0 md:sticky md:top-32 md:h-fit">
           <PageSectionNav title="Contato" sections={sections} visible />
         </div>
 
         <div className="min-w-0">
-          <div className="grid gap-14 md:grid-cols-12 md:gap-12">
-            <section id="mensagem" aria-labelledby="mensagem-title" className="scroll-mt-28 md:col-span-7">
+          <div className="grid gap-14 xl:grid-cols-12 xl:gap-12">
+            <section id="mensagem" aria-labelledby="mensagem-title" className="scroll-mt-28 xl:col-span-7">
               <h2 id="mensagem-title" className="text-2xl md:text-3xl">Envie uma mensagem</h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
                 O assunto escolhido ajuda a encaminhar sua solicitação para a equipe certa.
@@ -53,28 +53,28 @@ export function Contato() {
               </div>
             </section>
 
-            <section id="contato-direto" aria-labelledby="contato-direto-title" className="scroll-mt-28 md:col-span-4 md:col-start-9">
+            <section id="contato-direto" aria-labelledby="contato-direto-title" className="scroll-mt-28 xl:col-span-4 xl:col-start-9">
               <h2 id="contato-direto-title" className="text-2xl md:text-3xl">Contato direto</h2>
               <dl className="mt-5 divide-y divide-ink/15 border-y border-ink/15">
                 <div className="flex gap-3 py-4">
                   <ContactIcon type="phone" />
                   <div>
                     <dt className="text-xs uppercase tracking-[0.12em] text-muted">Telefone</dt>
-                    <dd className="mt-1.5 text-sm"><a href={`tel:${office.phoneHref}`} className="transition-colors hover:text-wine">{office.phone}</a></dd>
+                    <dd className="mt-1.5 text-sm"><a href={`tel:${office.phoneHref}`} className="inline-flex min-h-11 items-center transition-colors hover:text-wine">{office.phone}</a></dd>
                   </div>
                 </div>
                 <div className="flex gap-3 py-4">
                   <ContactIcon type="mail" />
                   <div>
                     <dt className="text-xs uppercase tracking-[0.12em] text-muted">E-mail</dt>
-                    <dd className="mt-1.5 break-words text-sm"><a href={`mailto:${office.email}`} className="transition-colors hover:text-wine">{office.email}</a></dd>
+                    <dd className="mt-1.5 break-words text-sm"><a href={`mailto:${office.email}`} className="inline-flex min-h-11 items-center transition-colors hover:text-wine">{office.email}</a></dd>
                   </div>
                 </div>
                 <div className="flex gap-3 py-4">
                   <ContactIcon type="chat" />
                   <div>
                     <dt className="text-xs uppercase tracking-[0.12em] text-muted">WhatsApp de vendas</dt>
-                    <dd className="mt-1.5 text-sm"><a href={office.whatsappHref} target="_blank" rel="noreferrer" className="transition-colors hover:text-wine">{office.whatsapp}</a></dd>
+                    <dd className="mt-1.5 text-sm"><a href={office.whatsappHref} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center transition-colors hover:text-wine">{office.whatsapp}</a></dd>
                   </div>
                 </div>
               </dl>
@@ -82,8 +82,8 @@ export function Contato() {
           </div>
 
           <section id="localizacao" aria-labelledby="localizacao-title" className="scroll-mt-28 mt-20 border-t border-ink/15 pt-8 md:mt-32 md:pt-10">
-            <div className="grid gap-8 md:grid-cols-12 md:gap-12">
-              <div className="md:col-span-4">
+            <div className="grid gap-8 xl:grid-cols-12 xl:gap-12">
+              <div className="xl:col-span-4">
                 <div className="flex gap-3">
                   <ContactIcon type="pin" />
                   <div>
@@ -91,14 +91,14 @@ export function Contato() {
                     <address className="mt-4 text-sm leading-relaxed text-muted not-italic">
                       {office.address}<br />{office.city}
                     </address>
-                    <a href={office.mapHref} target="_blank" rel="noreferrer" className="mt-5 inline-flex cursor-pointer items-center gap-2 border-b border-ink/40 pb-1 text-xs transition-colors hover:border-wine hover:text-wine">
+                    <a href={office.mapHref} target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-11 cursor-pointer items-center gap-2 border-b border-ink/40 text-xs transition-colors hover:border-wine hover:text-wine">
                       Ver rota no Google Maps
                       <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" className="size-3.5"><path d="M4 12 12 4M5 4h7v7" /></svg>
                     </a>
                   </div>
                 </div>
               </div>
-              <div className="md:col-span-8">
+              <div className="xl:col-span-8">
                 <iframe
                   title="Localização do escritório da Tecvale no Hyde Park, em São José dos Campos"
                   src={office.mapEmbed}
@@ -111,14 +111,14 @@ export function Contato() {
           </section>
 
           <section id="faq" aria-labelledby="faq-title" className="scroll-mt-28 mt-20 border-t border-ink/15 pt-8 md:mt-32 md:pt-10">
-            <div className="grid gap-8 md:grid-cols-12 md:gap-12">
-              <div className="md:col-span-4">
+            <div className="grid gap-8 xl:grid-cols-12 xl:gap-12">
+              <div className="xl:col-span-4">
                 <h2 id="faq-title" className="text-3xl md:text-4xl">Dúvidas frequentes</h2>
                 <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
                   Respostas sobre o formulário, o atendimento e o escritório da Tecvale.
                 </p>
               </div>
-              <div className="md:col-span-8">
+              <div className="xl:col-span-8">
                 {[
                   {
                     question: 'Que tipo de assunto posso enviar pelo formulário?',

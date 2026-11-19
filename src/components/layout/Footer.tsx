@@ -25,8 +25,8 @@ export function Footer() {
   return (
     <footer className="bg-page text-ink">
       <div className="frame-x mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1600px] flex-col">
-        <div className="grid flex-1 gap-8 py-8 md:grid-cols-12 md:gap-8 md:py-10">
-          <div className="md:col-span-3">
+        <div className="grid flex-1 gap-8 py-8 md:py-10 xl:grid-cols-12 xl:gap-8">
+          <div className="xl:col-span-3">
             <Link to="/" aria-label="Tecvale, página inicial" className="inline-block">
               <img src="/images/logo-tecvale-vermelho.svg" alt="Tecvale" className="w-36 md:w-40" />
             </Link>
@@ -38,23 +38,23 @@ export function Footer() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{office.address}<br />{office.city}</p>
           </div>
 
-          <nav aria-label="Navegação do rodapé" className="md:col-span-2 md:col-start-5">
+          <nav aria-label="Navegação do rodapé" className="xl:col-span-2 xl:col-start-5">
             <h3 className="text-[10px] uppercase tracking-[0.16em] text-muted">Navegação</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {nav.map((item) => (
                 <li key={item.to}>
-                  <Link className="text-ink/80 transition-colors hover:text-wine" to={item.to}>{item.label}</Link>
+                  <Link className="inline-flex min-h-11 items-center text-ink/80 transition-colors hover:text-wine" to={item.to}>{item.label}</Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav aria-label="Redes sociais" className="md:col-span-2 md:col-start-7">
+          <nav aria-label="Redes sociais" className="xl:col-span-2 xl:col-start-7">
             <h3 className="text-[10px] uppercase tracking-[0.16em] text-muted">Redes sociais</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {socialLinks.map((social) => (
                 <li key={social.label}>
-                  <a className="inline-flex items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={social.href} target="_blank" rel="noreferrer">
+                  <a className="inline-flex min-h-11 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={social.href} target="_blank" rel="noreferrer">
                     <SocialIcon name={social.label} />
                     {social.label}
                   </a>
@@ -63,12 +63,12 @@ export function Footer() {
             </ul>
           </nav>
 
-          <address className="not-italic md:col-span-3 md:col-start-10">
+          <address className="not-italic xl:col-span-3 xl:col-start-10">
             <h3 className="text-[10px] uppercase tracking-[0.16em] text-muted">Contato</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
-              <li><a className="inline-flex min-w-0 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={`mailto:${office.email}`}><ContactIcon type="email" />{office.email}</a></li>
-              <li><a className="inline-flex items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={`tel:${office.phoneHref}`}><ContactIcon type="phone" />{office.phone}</a></li>
-              <li><a className="inline-flex items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={office.whatsappHref} target="_blank" rel="noreferrer"><ContactIcon type="whatsapp" />WhatsApp {office.whatsapp}</a></li>
+              <li><a className="inline-flex min-h-11 min-w-0 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={`mailto:${office.email}`}><ContactIcon type="email" />{office.email}</a></li>
+              <li><a className="inline-flex min-h-11 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={`tel:${office.phoneHref}`}><ContactIcon type="phone" />{office.phone}</a></li>
+              <li><a className="inline-flex min-h-11 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={office.whatsappHref} target="_blank" rel="noreferrer"><ContactIcon type="whatsapp" />WhatsApp {office.whatsapp}</a></li>
             </ul>
           </address>
         </div>
@@ -77,7 +77,7 @@ export function Footer() {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="inline-flex cursor-pointer items-center gap-2 text-xs text-muted transition-colors hover:text-wine focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-wine"
+            className="inline-flex min-h-11 cursor-pointer items-center gap-2 px-2 text-xs text-muted transition-colors hover:text-wine focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-wine"
           >
             Voltar para o topo
             <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" className="size-4">

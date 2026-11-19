@@ -45,7 +45,7 @@ function PlansSection({ plans }: { plans: Plan[] }) {
             type="button"
             aria-pressed={selectedPlan.name === plan.name}
             onClick={() => setSelectedName(plan.name)}
-            className={`border-b-2 px-1 py-3 text-sm transition-colors hover:text-wine ${selectedPlan.name === plan.name ? 'border-wine text-wine' : 'border-transparent text-muted'}`}
+            className={`min-h-11 cursor-pointer border-b-2 px-1 py-2 text-sm transition-colors hover:text-wine ${selectedPlan.name === plan.name ? 'border-wine text-wine' : 'border-transparent text-muted'}`}
           >
             {plan.name}
           </button>
@@ -149,7 +149,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
 
       <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-8 md:pb-36 md:pt-10">
         <div className="grid gap-8 border-t border-ink/15 pt-6 md:grid-cols-[150px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-8">
-          <div className="md:sticky md:top-32 md:h-fit">
+          <div className="min-w-0 md:sticky md:top-32 md:h-fit">
             <PageSectionNav title="Neste empreendimento" sections={sections} visible={menuVisible} />
           </div>
 
@@ -233,7 +233,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
                   {p.address && <p className="mt-3 text-sm leading-relaxed">{p.address}</p>}
                   {p.locationContext && <p className="mt-5 max-w-lg text-sm leading-relaxed text-muted">{p.locationContext}</p>}
                   {mapHref && (
-                    <a href={mapHref} target="_blank" rel="noreferrer" className="mt-6 inline-flex text-sm text-wine underline underline-offset-4 transition-colors hover:text-wine-dark">
+                    <a href={mapHref} target="_blank" rel="noreferrer" className="mt-6 inline-flex min-h-11 items-center text-sm text-wine underline underline-offset-4 transition-colors hover:text-wine-dark">
                       Abrir localização no mapa
                     </a>
                   )}
@@ -306,7 +306,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
                 <div className="mt-7"><ButtonLink to={contactHref} variant="light">Falar com a equipe</ButtonLink></div>
               </div>
               <p className="mt-5 text-sm">
-                <Link to="/empreendimentos" className="text-wine underline underline-offset-4 transition-colors hover:text-wine-dark">Ver todos os empreendimentos</Link>
+                <Link to="/empreendimentos" className="inline-flex min-h-11 items-center text-wine underline underline-offset-4 transition-colors hover:text-wine-dark">Ver todos os empreendimentos</Link>
               </p>
             </section>
 

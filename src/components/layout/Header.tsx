@@ -41,7 +41,7 @@ export function Header() {
           aria-controls="menu-principal"
           aria-label={open ? 'Fechar menu' : 'Abrir menu'}
           onClick={() => setOpen((v) => !v)}
-          className="group relative z-50 flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-2 transition-colors hover:text-wine active:scale-95"
+          className="group relative z-50 flex h-11 w-11 cursor-pointer flex-col items-start justify-center gap-2 transition-colors hover:text-wine active:scale-95"
         >
           <span className={`h-px bg-ink transition-[width,transform,background-color] duration-200 ease-out group-hover:bg-wine ${open ? 'w-6 translate-y-[4px] rotate-45' : 'w-7'}`} />
           <span className={`h-px bg-ink transition-[width,transform,background-color] duration-200 ease-out group-hover:bg-wine ${open ? 'w-6 -translate-y-[4px] -rotate-45' : 'w-7'}`} />
@@ -52,7 +52,7 @@ export function Header() {
         <button
           type="button"
           aria-label="Idioma: português e inglês"
-          className="group justify-self-end cursor-pointer text-xs uppercase tracking-[0.12em] transition-transform active:scale-95"
+          className="group min-h-11 justify-self-end cursor-pointer px-1 text-xs uppercase tracking-[0.12em] transition-transform active:scale-95"
         >
           <span className="text-ink transition-colors group-hover:text-wine">PT</span>
           <span aria-hidden="true" className="mx-2 text-muted">|</span>

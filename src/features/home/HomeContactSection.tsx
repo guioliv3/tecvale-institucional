@@ -16,7 +16,7 @@ export function HomeContactSection() {
             href={office.mapHref}
             target="_blank"
             rel="noreferrer"
-            className="mt-3 inline-flex text-sm underline decoration-white/60 underline-offset-4 hover:decoration-white focus-visible:outline-white"
+            className="mt-3 inline-flex min-h-11 items-center text-sm underline decoration-white/60 underline-offset-4 hover:decoration-white focus-visible:outline-white"
           >
             Abrir no Google Maps
           </a>
