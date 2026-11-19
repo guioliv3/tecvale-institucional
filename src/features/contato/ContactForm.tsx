@@ -1,102 +1,190 @@
 import { useRef, useState, type FormEvent } from 'react'
-import { Link } from 'react-router'
 import type { Empreendimento } from '@/content/empreendimentos'
+import { portfolioEmpreendimentos } from '@/content/empreendimentos'
+import { office } from '@/content/site'
 import { maskPhone, validate, type ContactErrors, type ContactValues } from './validate'
+
+type ContactIntent = 'geral' | 'empreendimentos' | 'clientes'
+
+const intents: { id: ContactIntent; label: string; description: string; subject: string }[] = [
+  { id: 'geral', label: 'Contato geral', description: 'Dúvidas e informações para a equipe.', subject: 'Contato geral' },
+  { id: 'empreendimentos', label: 'Interesse em empreendimentos', description: 'Informações sobre os projetos da Tecvale.', subject: 'Interesse em empreendimentos' },
+  { id: 'clientes', label: 'Relacionamento com clientes', description: 'Atendimento para clientes Tecvale.', subject: 'Relacionamento com clientes' },
+]
 
 const empty: ContactValues = { nome: '', telefone: '', email: '', mensagem: '' }
 const fieldCls = (err?: string) =>
-  `mt-2 w-full border bg-white px-4 py-3 text-base ${err ? 'border-wine' : 'border-ink/20'}`
+  `mt-2 w-full border bg-white px-4 py-3 text-base focus:border-wine ${err ? 'border-wine' : 'border-ink/20'}`
 
 export function ContactForm({ projeto }: { projeto?: Empreendimento }) {
   const [values, setValues] = useState(empty)
   const [errors, setErrors] = useState<ContactErrors>({})
-  const [sent, setSent] = useState(false)
+  const [intent, setIntent] = useState<ContactIntent>(projeto ? 'empreendimentos' : 'geral')
+  const [projectSlug, setProjectSlug] = useState(projeto?.slug ?? '')
+  const [contactUrl, setContactUrl] = useState('')
   const formRef = useRef<HTMLFormElement>(null)
   const doneRef = useRef<HTMLDivElement>(null)
+  const selectedIntent = intents.find((option) => option.id === intent)!
+  const selectedProject = portfolioEmpreendimentos.find((project) => project.slug === projectSlug)
 
-  const set = (k: keyof ContactValues, v: string) => {
-    setValues((s) => ({ ...s, [k]: v }))
-    if (errors[k]) setErrors((s) => ({ ...s, [k]: undefined }))
+  const set = (key: keyof ContactValues, value: string) => {
+    setValues((current) => ({ ...current, [key]: value }))
+    if (errors[key]) setErrors((current) => ({ ...current, [key]: undefined }))
   }
 
-  const onSubmit = (ev: FormEvent) => {
-    ev.preventDefault()
-    const errs = validate(values)
-    setErrors(errs)
-    const first = (Object.keys(errs) as (keyof ContactValues)[])[0]
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    const nextErrors = validate(values)
+    setErrors(nextErrors)
+    const first = (Object.keys(nextErrors) as (keyof ContactValues)[])[0]
     if (first) {
       formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus()
       return
     }
-    setSent(true)
-    setTimeout(() => doneRef.current?.focus(), 0)
+
+    const message = [
+      `Assunto: ${selectedIntent.subject}`,
+      selectedProject && `Empreendimento: ${selectedProject.name}`,
+      `Nome: ${values.nome}`,
+      `Telefone: ${values.telefone}`,
+      `E-mail: ${values.email}`,
+      '',
+      values.mensagem,
+    ].filter((line): line is string => Boolean(line)).join('\n')
+    const isSalesContact = intent === 'empreendimentos'
+    const url = isSalesContact
+      ? `${office.whatsappHref}?text=${encodeURIComponent(message)}`
+      : `mailto:${office.email}?subject=${encodeURIComponent(selectedIntent.subject)}&body=${encodeURIComponent(message)}`
+    setContactUrl(url)
+    window.open(url, '_blank', 'noopener,noreferrer')
+    window.setTimeout(() => doneRef.current?.focus(), 0)
   }
 
-  if (sent) {
+  if (contactUrl) {
+    const channel = intent === 'empreendimentos' ? 'WhatsApp' : 'e-mail'
     return (
-      <div ref={doneRef} tabIndex={-1} role="status" className="border border-wine/30 bg-white p-8 outline-none">
-        <h2 className="text-3xl">Mensagem simulada</h2>
-        <p className="mt-3 leading-relaxed text-muted">
-          Este é um site de demonstração: nenhuma mensagem foi enviada de verdade e nenhum dado foi armazenado.
-          {projeto ? ` Interesse registrado na tela: ${projeto.name}.` : ''}
+      <div ref={doneRef} tabIndex={-1} role="status" className="border-t border-wine pt-6 outline-none">
+        <h2 className="text-3xl">Sua mensagem está pronta.</h2>
+        <p className="mt-3 max-w-xl leading-relaxed text-muted">
+          Revise os dados e envie a mensagem pelo {channel}. Nada é transmitido ou armazenado por este site.
         </p>
-        <button
-          type="button"
-          onClick={() => { setValues(empty); setSent(false) }}
-          className="mt-6 border-b border-ink pb-1 text-xs font-medium uppercase tracking-[0.16em] hover:text-wine"
-        >
-          Preencher novamente
-        </button>
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <a
+            href={contactUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-12 cursor-pointer items-center bg-wine px-5 text-sm text-white transition-colors hover:bg-wine-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine"
+          >
+            {channel === 'WhatsApp' ? 'Abrir conversa no WhatsApp' : 'Abrir e-mail'}
+          </a>
+          <button
+            type="button"
+            onClick={() => setContactUrl('')}
+            className="cursor-pointer border-b border-ink pb-1 text-sm transition-colors hover:border-wine hover:text-wine"
+          >
+            Voltar e editar
+          </button>
+        </div>
       </div>
     )
   }
 
-  const field = (k: keyof ContactValues, label: string, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
+  const field = (key: keyof ContactValues, label: string, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
     <div>
-      <label htmlFor={k} className="text-sm font-medium">{label}</label>
+      <label htmlFor={key} className="text-sm font-medium">{label}</label>
       <input
-        id={k}
-        name={k}
-        value={values[k]}
-        onChange={(e) => set(k, k === 'telefone' ? maskPhone(e.target.value) : e.target.value)}
-        aria-invalid={!!errors[k]}
-        aria-describedby={errors[k] ? `${k}-erro` : undefined}
-        className={fieldCls(errors[k])}
+        id={key}
+        name={key}
+        value={values[key]}
+        onChange={(event) => set(key, key === 'telefone' ? maskPhone(event.target.value) : event.target.value)}
+        aria-invalid={!!errors[key]}
+        aria-describedby={errors[key] ? `${key}-erro` : undefined}
+        className={fieldCls(errors[key])}
+        required
         {...props}
       />
-      {errors[k] && <p id={`${k}-erro`} className="mt-1.5 text-sm text-wine">{errors[k]}</p>}
+      {errors[key] && <p id={`${key}-erro`} className="mt-1.5 text-sm text-wine">{errors[key]}</p>}
     </div>
   )
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-6">
-      {projeto && (
-        <div className="bg-surface px-4 py-3 text-sm">
-          Empreendimento de interesse: <strong className="font-medium">{projeto.name}</strong>{' '}
-          <Link to="/contato" className="ml-2 underline underline-offset-4 hover:text-wine">remover</Link>
+    <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-7">
+      <fieldset>
+        <legend className="text-sm font-medium">Como podemos ajudar?</legend>
+        <div className="mt-3 grid gap-x-6 sm:grid-cols-3">
+          {intents.map((option) => (
+            <label
+              key={option.id}
+              className={`cursor-pointer border-t py-4 transition-colors hover:border-wine ${intent === option.id ? 'border-wine' : 'border-ink/20'}`}
+            >
+              <span className="flex items-start gap-3">
+                <input
+                  type="radio"
+                  name="tipo-contato"
+                  value={option.id}
+                  checked={intent === option.id}
+                  onChange={() => setIntent(option.id)}
+                  className="mt-1 accent-wine"
+                />
+                <span>
+                  <span className={`block text-sm font-medium ${intent === option.id ? 'text-wine' : 'text-ink'}`}>
+                    {option.label}
+                  </span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted">{option.description}</span>
+                </span>
+              </span>
+            </label>
+          ))}
+        </div>
+        <p className="mt-1 text-xs text-muted" aria-live="polite">Assunto: {selectedIntent.subject}</p>
+      </fieldset>
+
+      {intent === 'empreendimentos' && (
+        <div>
+          <label htmlFor="empreendimento" className="text-sm font-medium">Empreendimento de interesse <span className="text-muted">(opcional)</span></label>
+          <select
+            id="empreendimento"
+            name="empreendimento"
+            value={projectSlug}
+            onChange={(event) => setProjectSlug(event.target.value)}
+            className={`${fieldCls()} cursor-pointer`}
+          >
+            <option value="">Selecione um empreendimento</option>
+            {portfolioEmpreendimentos.map((project) => (
+              <option key={project.slug} value={project.slug}>{project.name}</option>
+            ))}
+          </select>
         </div>
       )}
-      {field('nome', 'Nome completo', { autoComplete: 'name' })}
-      {field('telefone', 'Telefone com DDD', { type: 'tel', autoComplete: 'tel', inputMode: 'tel', placeholder: '(12) 99999-9999' })}
-      {field('email', 'E-mail', { type: 'email', autoComplete: 'email' })}
-      <div>
-        <label htmlFor="mensagem" className="text-sm font-medium">Mensagem</label>
-        <textarea
-          id="mensagem"
-          name="mensagem"
-          rows={5}
-          value={values.mensagem}
-          onChange={(e) => set('mensagem', e.target.value)}
-          aria-invalid={!!errors.mensagem}
-          aria-describedby={errors.mensagem ? 'mensagem-erro' : undefined}
-          className={fieldCls(errors.mensagem)}
-        />
-        {errors.mensagem && <p id="mensagem-erro" className="mt-1.5 text-sm text-wine">{errors.mensagem}</p>}
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        {field('nome', 'Nome completo', { autoComplete: 'name' })}
+        {field('telefone', 'Telefone com DDD', { type: 'tel', autoComplete: 'tel', inputMode: 'tel', placeholder: '(12) 99999-9999' })}
+        {field('email', 'E-mail', { type: 'email', autoComplete: 'email' })}
+        <div className="sm:col-span-2">
+          <label htmlFor="mensagem" className="text-sm font-medium">Mensagem</label>
+          <textarea
+            id="mensagem"
+            name="mensagem"
+            rows={5}
+            value={values.mensagem}
+            onChange={(event) => set('mensagem', event.target.value)}
+            aria-invalid={!!errors.mensagem}
+            aria-describedby={errors.mensagem ? 'mensagem-erro' : undefined}
+            className={fieldCls(errors.mensagem)}
+            placeholder={intent === 'clientes' ? 'Conte como a equipe pode ajudar você.' : 'Escreva sua mensagem.'}
+            required
+          />
+          {errors.mensagem && <p id="mensagem-erro" className="mt-1.5 text-sm text-wine">{errors.mensagem}</p>}
+        </div>
       </div>
-      <button type="submit" className="h-[42px] bg-wine px-4 text-[13px] text-white hover:bg-wine-dark">
-        Enviar (simulado)
-      </button>
-      <p className="text-xs text-muted">O envio é simulado: nada é transmitido ou armazenado.</p>
+
+      <div>
+        <button type="submit" className="inline-flex min-h-12 cursor-pointer items-center bg-wine px-5 text-sm text-white transition-colors hover:bg-wine-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine">
+          {intent === 'empreendimentos' ? 'Continuar pelo WhatsApp' : 'Continuar por e-mail'}
+        </button>
+        <p className="mt-3 text-xs text-muted">Você poderá revisar a mensagem antes de enviá-la.</p>
+      </div>
     </form>
   )
 }

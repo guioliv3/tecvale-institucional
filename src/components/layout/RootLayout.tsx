@@ -3,7 +3,6 @@ import { Outlet, useLocation } from "react-router";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { getEmpreendimento } from "@/content/empreendimentos";
-import { ContactForm } from "@/features/contato/ContactForm";
 
 const siteUrl = "https://tecvaleconstrutora.com.br";
 
@@ -26,16 +25,12 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
   "/contato": {
     title: "Contato | Tecvale",
     description:
-      "Entre em contato com a equipe da Tecvale para saber mais sobre nossos empreendimentos.",
+      "Fale com a Tecvale por telefone, e-mail, WhatsApp ou formulário e encontre o escritório em São José dos Campos.",
   },
 };
 
 export function RootLayout() {
-  const { pathname, search } = useLocation();
-  const selectedProject =
-    pathname === "/contato"
-      ? getEmpreendimento(new URLSearchParams(search).get("empreendimento") ?? undefined)
-      : undefined;
+  const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -114,21 +109,6 @@ export function RootLayout() {
       <main id="conteudo">
         <Outlet />
       </main>
-      <section aria-labelledby="footer-contact-title" className="bg-surface py-20 md:py-28">
-        <div className="frame-x mx-auto grid max-w-[1600px] gap-10 md:grid-cols-12 md:gap-16">
-          <div className="md:col-span-4">
-            <h2 id="footer-contact-title" className="text-3xl md:text-5xl">
-              Envie uma mensagem
-            </h2>
-            <p className="mt-4 max-w-sm leading-relaxed text-muted">
-              Conte como podemos ajudar e fale com a equipe da Tecvale.
-            </p>
-          </div>
-          <div className="md:col-span-7 md:col-start-6">
-            <ContactForm key={selectedProject?.slug ?? "geral"} projeto={selectedProject} />
-          </div>
-        </div>
-      </section>
       <Footer />
     </>
   );

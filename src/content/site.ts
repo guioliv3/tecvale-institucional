@@ -28,8 +28,13 @@ export const journal = [
 ]
 
 export const office = {
-  address: 'Endereço do escritório a confirmar',
+  address: 'Hyde Park, Avenida Cassiano Ricardo, 401, sala 804, Parque Residencial Aquarius',
   city: 'São José dos Campos, SP',
-  email: 'contato@tecvale.example',
-  phone: '(12) 0000-0000',
+  email: 'contato@tecvaleconstrutora.com.br',
+  phone: '(12) 3307-7149',
+  phoneHref: '+551233077149',
+  whatsapp: '(12) 98284-3482',
+  whatsappHref: 'https://wa.me/5512982843482',
+  mapHref: 'https://www.google.com/maps/place/TECVALE+construtora+e+incorporadora+ltda/@-23.2160234,-45.9096423,15z/data=!4m6!3m5!1s0x94cc35827828a4b1:0x60c9f26c35520429!8m2!3d-23.2160234!4d-45.9096423!16s%2Fg%2F11f2wcgg08',
+  mapEmbed: 'https://maps.google.com/maps?q=-23.2160234,-45.9096423&z=16&output=embed',
 }

@@ -41,7 +41,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10">
         <p className="frame-x mx-auto max-w-[1600px] py-6 text-xs text-white/80">
-          © Tecvale. Site de demonstração: imagens, textos, números e contatos são provisórios.
+          © Tecvale.
         </p>
       </div>
     </footer>
