@@ -81,9 +81,10 @@ export function ProjectsShowcase({ projects = recentProjects }: ProjectsShowcase
           <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-4">
             <TextLink to="/empreendimentos">Ver empreendimentos</TextLink>
             <p className="inline-flex items-center gap-2 text-xs text-muted">
-              Clique e arraste para ver mais
-              <svg viewBox="0 0 24 24" className="size-4 text-wine" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                <path d="M4 12h16m-4-4 4 4-4 4M8 8l-4 4 4 4" />
+              <span className="md:hidden">Deslize para a direita para ver mais</span>
+              <span className="hidden md:inline">Clique e arraste para ver mais</span>
+              <svg viewBox="0 0 24 24" className="size-4 shrink-0 text-wine" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <path d="M4 12h16m-6-6 6 6-6 6" />
               </svg>
             </p>
           </div>

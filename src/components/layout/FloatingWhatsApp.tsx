@@ -3,15 +3,21 @@ import { useEffect, useState } from 'react'
 const whatsappUrl = 'https://wa.me/5512988534827'
 
 export function FloatingWhatsApp() {
-  const [visible, setVisible] = useState(() => window.scrollY > 0)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     const updateVisibility = () => {
-      if (window.scrollY > 0) setVisible(true)
+      const hero = document.querySelector<HTMLElement>('[data-home-hero]')
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+      setVisible(window.scrollY > 0 && !(isMobile && hero && hero.getBoundingClientRect().bottom > 0))
     }
     updateVisibility()
     window.addEventListener('scroll', updateVisibility, { passive: true })
-    return () => window.removeEventListener('scroll', updateVisibility)
+    window.addEventListener('resize', updateVisibility)
+    return () => {
+      window.removeEventListener('scroll', updateVisibility)
+      window.removeEventListener('resize', updateVisibility)
+    }
   }, [])
 
   return (

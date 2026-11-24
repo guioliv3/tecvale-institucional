@@ -25,8 +25,8 @@ export function Footer() {
   return (
     <footer className="bg-page text-ink">
       <div className="frame-x mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1600px] flex-col">
-        <div className="grid flex-1 gap-8 py-8 md:py-10 xl:grid-cols-12 xl:gap-8">
-          <div className="xl:col-span-3">
+        <div className="grid flex-1 justify-items-center gap-8 py-8 text-center md:justify-items-start md:text-left md:py-10 xl:grid-cols-12 xl:gap-8">
+          <div className="flex flex-col items-center md:items-start xl:col-span-3">
             <Link to="/" aria-label="Tecvale, página inicial" className="inline-block">
               <img src="/images/logo-tecvale-vermelho.svg" alt="Tecvale" className="w-36 md:w-40" />
             </Link>
@@ -38,9 +38,9 @@ export function Footer() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{office.address}<br />{office.city}</p>
           </div>
 
-          <nav aria-label="Navegação do rodapé" className="xl:col-span-2 xl:col-start-5">
+          <nav aria-label="Navegação do rodapé" className="flex flex-col items-center md:items-start xl:col-span-2 xl:col-start-5">
             <h3 className="text-[10px] uppercase tracking-[0.16em] text-muted">Navegação</h3>
-            <ul className="mt-4 space-y-2.5 text-sm">
+            <ul className="mt-4 flex flex-col items-center space-y-2.5 text-sm md:items-start">
               {nav.map((item) => (
                 <li key={item.to}>
                   <Link className="inline-flex min-h-11 items-center text-ink/80 transition-colors hover:text-wine" to={item.to}>{item.label}</Link>
@@ -49,9 +49,9 @@ export function Footer() {
             </ul>
           </nav>
 
-          <nav aria-label="Redes sociais" className="xl:col-span-2 xl:col-start-7">
+          <nav aria-label="Redes sociais" className="flex flex-col items-center md:items-start xl:col-span-2 xl:col-start-7">
             <h3 className="text-[10px] uppercase tracking-[0.16em] text-muted">Redes sociais</h3>
-            <ul className="mt-4 space-y-2.5 text-sm">
+            <ul className="mt-4 flex flex-col items-center space-y-2.5 text-sm md:items-start">
               {socialLinks.map((social) => (
                 <li key={social.label}>
                   <a className="inline-flex min-h-11 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={social.href} target="_blank" rel="noreferrer">
@@ -63,9 +63,9 @@ export function Footer() {
             </ul>
           </nav>
 
-          <address className="not-italic xl:col-span-3 xl:col-start-10">
+          <address className="flex flex-col items-center not-italic md:items-start xl:col-span-3 xl:col-start-10">
             <h3 className="text-[10px] uppercase tracking-[0.16em] text-muted">Contato</h3>
-            <ul className="mt-4 space-y-2.5 text-sm">
+            <ul className="mt-4 flex flex-col items-center space-y-2.5 text-sm md:items-start">
               <li><a className="inline-flex min-h-11 min-w-0 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={`mailto:${office.email}`}><ContactIcon type="email" />{office.email}</a></li>
               <li><a className="inline-flex min-h-11 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={`tel:${office.phoneHref}`}><ContactIcon type="phone" />{office.phone}</a></li>
               <li><a className="inline-flex min-h-11 items-center gap-2.5 text-ink/80 transition-colors hover:text-wine" href={office.whatsappHref} target="_blank" rel="noreferrer"><ContactIcon type="whatsapp" />WhatsApp {office.whatsapp}</a></li>
@@ -73,7 +73,7 @@ export function Footer() {
           </address>
         </div>
 
-        <div className="flex justify-end pb-4">
+        <div className="flex justify-center pb-4 md:justify-end">
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -86,7 +86,7 @@ export function Footer() {
           </button>
         </div>
 
-        <div className="grid gap-4 border-t border-ink/15 py-4 text-xs text-muted sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+        <div className="grid justify-items-center gap-4 border-t border-ink/15 py-4 text-center text-xs text-muted md:grid-cols-[1fr_auto_1fr] md:items-center md:justify-items-stretch md:text-left">
           <div>
             <p>© Tecvale Construtora e Incorporadora.</p>
             <p className="mt-1">São José dos Campos · SP</p>
@@ -95,7 +95,7 @@ export function Footer() {
             <p className="font-serif text-sm text-ink/80">“Tudo posso naquele que me fortalece.”</p>
             <p className="mt-1">Filipenses 4:13</p>
           </div>
-          <a className="inline-flex items-center gap-2 text-ink/80 transition-colors hover:text-wine sm:justify-self-end" href="https://wa.me/5512988534827" target="_blank" rel="noreferrer">
+          <a className="inline-flex items-center gap-2 text-ink/80 transition-colors hover:text-wine md:justify-self-end" href="https://wa.me/5512988534827" target="_blank" rel="noreferrer">
             <ContactIcon type="whatsapp" /> Desenvolvido por G.O.
           </a>
         </div>

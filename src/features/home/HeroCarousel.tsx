@@ -49,6 +49,7 @@ export function HeroCarousel({
 
   return (
     <section
+      data-home-hero={!compact ? '' : undefined}
       aria-roledescription={compact ? undefined : 'carrossel'}
       aria-label={compact ? title ?? 'Empreendimentos' : 'Empreendimentos em destaque'}
       className="frame-x bg-page pb-0"
@@ -70,20 +71,20 @@ export function HeroCarousel({
             <img src={s.cover.src} alt={s.cover.alt} className="h-full w-full object-cover brightness-[.72]" loading={i === 0 ? 'eager' : 'lazy'} />
           </div>
         ))}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" />
         {compact && <ProvisionalTag className="absolute left-4 top-4 md:left-6 md:top-6" />}
 
-        <div className={`absolute inset-x-0 bottom-0 flex flex-col md:flex-row md:items-end md:justify-between ${compact ? 'gap-3 p-5 md:gap-5 md:p-8' : 'gap-6 p-5 md:p-10'}`}>
+        <div className={`absolute inset-x-0 bottom-0 flex flex-col md:flex-row md:items-end md:justify-between ${compact ? 'gap-3 p-5 md:gap-5 md:p-8' : 'gap-3 p-4 md:gap-6 md:p-10'}`}>
           {/* Controles: acima do texto no celular, à direita no desktop */}
           {!compact && <div className="order-first flex items-center gap-4 md:order-last md:flex-col md:items-end md:gap-5">
-            <ul className="flex flex-wrap gap-x-5 gap-y-1 md:flex-col md:items-end md:gap-2">
+            <ul className="flex flex-wrap gap-x-3 gap-y-0 md:flex-col md:items-end md:gap-2">
               {slides.map((s, i) => (
                 <li key={s.slug}>
                   <button
                     type="button"
                     aria-current={i === active}
                     onClick={() => setActive(i)}
-                    className={`min-h-11 cursor-pointer border-b py-2 text-xs uppercase tracking-[0.16em] transition-opacity md:text-sm ${i === active ? 'border-white opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                    className={`min-h-9 cursor-pointer border-b py-1 text-[10px] uppercase tracking-[0.12em] transition-opacity md:min-h-11 md:py-2 md:text-sm md:tracking-[0.16em] ${i === active ? 'border-white opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
                   >
                     {s.name}
                   </button>
@@ -95,7 +96,7 @@ export function HeroCarousel({
                 type="button"
                 onClick={() => setPaused((p) => !p)}
                 aria-label={paused ? 'Retomar avanço automático' : 'Pausar avanço automático'}
-                className="ml-auto flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center border border-white/60 hover:bg-white/15 md:ml-0"
+                className="ml-auto flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center border border-white/60 hover:bg-white/15 md:ml-0 md:h-11 md:w-11"
               >
                 {paused ? (
                   <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>
@@ -107,12 +108,12 @@ export function HeroCarousel({
           </div>}
 
           <div className="max-w-md" aria-live={autoplay ? 'off' : 'polite'}>
-            <h1 className="text-4xl md:text-6xl">{title ?? slides[active].name}</h1>
-            <p className="mt-3 text-sm leading-relaxed text-white/85 md:text-base">
+            <h1 className="text-3xl md:text-6xl">{title ?? slides[active].name}</h1>
+            <p className="mt-2 line-clamp-2 text-xs leading-snug text-white/90 md:mt-3 md:line-clamp-none md:text-base md:leading-relaxed">
               {description ?? slides[active].summary}
             </p>
             {!compact && (
-              <div className="mt-6">
+              <div className="mt-3 md:mt-6">
                 <TextLink to={projectHref(slides[active])} variant="light">Conhecer o projeto</TextLink>
               </div>
             )}

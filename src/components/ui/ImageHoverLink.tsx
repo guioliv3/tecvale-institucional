@@ -29,7 +29,7 @@ export function ImageHoverLink({
       <span
         ref={cursor}
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 grid h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-wine text-white opacity-0 transition-opacity duration-150 group-hover/image-hover:opacity-100 group-focus-visible/image-hover:opacity-100 [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
+        className="pointer-events-none absolute left-1/2 top-1/2 grid h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-wine text-white opacity-0 transition-opacity duration-150 [@media(hover:hover)]:group-hover/image-hover:opacity-100 group-focus-visible/image-hover:opacity-100 motion-reduce:transition-none"
       >
         <span className="flex items-center gap-1 text-[9px] font-medium uppercase tracking-wide">
           {label}
