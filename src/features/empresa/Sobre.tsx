@@ -198,10 +198,10 @@ export function Sobre() {
               </div>
               <dl className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-8">
                 {[
-                  { value: 17, suffix: "+", label: "Anos de mercado" },
-                  { value: 9, suffix: "+", label: "Empreendimentos lançados" },
-                  { value: 21, suffix: " mil+", label: "m² em áreas divulgadas" },
-                  { value: 158, suffix: "+", label: "Unidades entregues" },
+                  { value: 20, suffix: "+", label: "Anos de mercado" },
+                  { value: 8, suffix: "+", label: "Empreendimentos lançados" },
+                  { value: 50, suffix: " mil+", label: "m² em áreas divulgadas" },
+                  { value: 328, suffix: "+", label: "Unidades entregues" },
                 ].map(({ value, suffix, label }) => (
                   <div key={label} className="flex min-w-0 flex-col">
                     <dt className="order-2 mt-3 text-[9px] uppercase leading-relaxed tracking-[0.14em] text-muted md:text-xs">
