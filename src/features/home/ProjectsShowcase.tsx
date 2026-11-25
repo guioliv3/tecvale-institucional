@@ -1,29 +1,20 @@
 import { useRef, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
-import { portfolioEmpreendimentos, projectHref, type Empreendimento } from '@/content/empreendimentos'
+import { projectHref, type Empreendimento } from '@/content/empreendimentos'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ImageHoverLink } from '@/components/ui/ImageHoverLink'
 import { Photo } from '@/components/ui/Photo'
 import { TextLink } from '@/components/ui/TextLink'
-
-const recentProjectSlugs = [
-  'ares-aquarius',
-  'neori-residence',
-  'noah',
-  'believe-residence',
-  'green-life-villa-branca',
-  'antonio-de-vimioso',
-]
-
-const recentProjects = recentProjectSlugs
-  .map((slug) => portfolioEmpreendimentos.find((project) => project.slug === slug))
-  .filter((project): project is Empreendimento => project !== undefined)
+import { useEmpreendimentos } from '@/features/empreendimentos/useEmpreendimentos'
+import { orderHomeProjects } from './homeProjects'
 
 type ProjectsShowcaseProps = {
-  /** Lista recebida pela interface; por padrão, mostra os seis projetos recentes. */
+  /** Lista recebida pela interface; por padrão, mostra seis projetos. */
   projects?: Empreendimento[]
 }
 
-export function ProjectsShowcase({ projects = recentProjects }: ProjectsShowcaseProps) {
+export function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
+  const { projects: portfolio } = useEmpreendimentos()
+  const visibleProjects = orderHomeProjects(projects ?? portfolio).slice(0, 6)
   const trackRef = useRef<HTMLDivElement>(null)
   const drag = useRef<{ pointerId: number; x: number; scrollLeft: number; moved: boolean } | null>(null)
   const suppressClick = useRef(false)
@@ -68,7 +59,7 @@ export function ProjectsShowcase({ projects = recentProjects }: ProjectsShowcase
     suppressClick.current = false
   }
 
-  if (!projects.length) return null
+  if (!visibleProjects.length) return null
 
   return (
     <section role="region" aria-label="Empreendimentos" aria-roledescription="carrossel" className="pb-20 md:pb-32">
@@ -104,10 +95,10 @@ export function ProjectsShowcase({ projects = recentProjects }: ProjectsShowcase
           className="flex touch-pan-y snap-x snap-mandatory cursor-grab select-none gap-6 overflow-x-auto pb-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-wine active:cursor-grabbing md:gap-8 [&::-webkit-scrollbar]:hidden"
           style={{ scrollbarWidth: 'none' }}
         >
-          {projects.map((project) => (
+          {visibleProjects.map((project) => (
             <article key={project.slug} className="w-[86vw] max-w-[560px] shrink-0 snap-start md:w-[min(42vw,500px)]">
               <ImageHoverLink to={projectHref(project)} label="Ver mais">
-                <Photo photo={project.cover} tag={false} className="h-[320px] md:h-[380px] lg:h-[450px]" imageClassName={project.slug === 'ares-aquarius' ? 'object-[31%_center]' : ''} />
+                <Photo photo={project.cover} sizes="(min-width: 768px) 500px, 86vw" tag={false} className="h-[320px] md:h-[380px] lg:h-[450px]" imageClassName={project.slug === 'ares-aquarius' ? 'object-[31%_center]' : ''} />
               </ImageHoverLink>
               <div className="pt-6 md:pt-7">
                 <Eyebrow className="line-clamp-1 min-h-[1.5em] text-muted">{project.name}</Eyebrow>

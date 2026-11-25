@@ -25,6 +25,7 @@ export type ProjectProgress = {
 
 export type Empreendimento = {
   slug: string
+  createdAt?: string
   name: string
   tagline: string
   summary: string
@@ -34,6 +35,7 @@ export type Empreendimento = {
   address?: string
   locationContext?: string
   mapUrl?: string
+  landingPageUrl?: string
   status: 'Lançamento' | 'Em obras' | 'Entregue'
   bedrooms: string
   area: string
@@ -43,154 +45,13 @@ export type Empreendimento = {
   progress?: ProjectProgress
   cover: Photo
   gallery: Photo[]
+  featuresGallery?: Photo[]
   featuresImage?: Photo
+  illustrativeMedia?: boolean
   plans: Plan[]
   features: { title: string; text: string }[]
   specs: { label: string; value: string }[]
-  relatedSlugs?: string[]
 }
-
-export const empreendimentos: Empreendimento[] = [
-  {
-    slug: 'neori-residence',
-    name: 'Neori Jardim Aquarius',
-    tagline: 'Apartamentos de 3 dormitórios no Jardim Aquarius.',
-    summary: 'Apartamentos de 3 dormitórios, com 86,6 m², suíte com sacada, varanda gourmet, 2 vagas e hobby box.',
-    presentation: [
-      'O Neori Jardim Aquarius reúne 52 apartamentos em torre única. As unidades têm 3 dormitórios, suíte com sacada, varanda gourmet, 2 vagas e hobby box.',
-      'O lazer será entregue equipado e decorado. O projeto também prevê coworking e dois elevadores com energia regenerativa e acesso por senha e reconhecimento facial.',
-    ],
-    neighborhood: 'Jardim Aquarius',
-    city: 'São José dos Campos, SP',
-    parking: '2 por unidade',
-    status: 'Em obras',
-    bedrooms: '3 dormitórios',
-    area: '86,6 m²',
-    cover: { src: img('neori-interior-option.jpg'), alt: 'Living do Neori Jardim Aquarius, imagem do site oficial da Tecvale' },
-    gallery: [],
-    plans: [],
-    features: [
-      { title: 'Varanda gourmet', text: 'Guarda-corpo em vidro e suíte com sacada.' },
-      { title: 'Coworking', text: 'Espaço de trabalho integrado às áreas comuns.' },
-      { title: 'Acesso e elevadores', text: 'Dois elevadores com energia regenerativa; acesso por senha e reconhecimento facial.' },
-      { title: 'Lazer equipado', text: 'Áreas comuns entregues equipadas e decoradas.' },
-    ],
-    specs: [
-      { label: 'Unidades', value: '52 apartamentos' },
-      { label: 'Vagas', value: '2 por unidade' },
-      { label: 'Hobby box', value: 'Incluído' },
-    ],
-  },
-  {
-    slug: 'noah',
-    name: 'Noah Residence',
-    tagline: 'Morar perto de tudo, na Vila Adyanna.',
-    summary: 'Apartamentos de 2 dormitórios, a partir de 76 m², com suíte e varanda gourmet, no coração da Vila Adyanna.',
-    presentation: [
-      'Noah Residence fica na Vila Adyanna, perto dos parques Vicentina Aranha e Santos Dumont, do Tênis Clube e de serviços nas avenidas Adhemar de Barros, Nove de Julho, São João e Anchieta.',
-      'Os apartamentos têm 2 dormitórios, suíte com sacada, varanda gourmet e área a partir de 76 m². O projeto tem lazer equipado e decorado, coworking, elevador com energia regenerativa e infraestrutura elétrica para carregamento de veículo em uma vaga por unidade.',
-    ],
-    neighborhood: 'Vila Adyanna',
-    city: 'São José dos Campos, SP',
-    locationContext: 'Próximo aos parques Vicentina Aranha e Santos Dumont, ao Tênis Clube e aos serviços das avenidas Adhemar de Barros, Nove de Julho, São João e Anchieta.',
-    parking: '1 vaga privativa por apartamento',
-    status: 'Em obras',
-    bedrooms: '2 dormitórios, 1 suíte',
-    area: 'A partir de 76 m²',
-    cover: { src: img('noah-residence.jpg'), alt: 'Apartamento decorado do Noah Residence, imagem do site oficial da Tecvale' },
-    gallery: [],
-    plans: [],
-    features: [
-      { title: 'Varanda gourmet', text: 'Varanda com ponto para TV e suíte com sacada.' },
-      { title: 'Lazer', text: 'Áreas comuns equipadas e decoradas, com piscinas, coworking e espaço fitness.' },
-      { title: 'Mobilidade elétrica', text: 'Previsão elétrica para tomada doméstica em uma vaga por apartamento.' },
-      { title: 'Acesso', text: 'Elevador com energia regenerativa, senha e reconhecimento facial.' },
-    ],
-    specs: [
-      { label: 'Vagas', value: '1 vaga privativa por apartamento' },
-      { label: 'Pé-direito', value: '2,70 m (2,50 m em áreas com sanca ou forro)' },
-    ],
-  },
-]
-
-const empreendimentosLancamentos: Empreendimento[] = [
-  {
-    slug: 'ares-aquarius',
-    name: 'Ares Aquarius',
-    tagline: 'Apartamentos de 3 dormitórios, com lazer em dois pavimentos.',
-    summary: '60 apartamentos em torre única, com 1 suíte, 2 vagas e plantas de 102,14 m² e 105,82 m².',
-    presentation: [
-      'No endereço Rua Itajaí, 30, no Jardim Aquarius, em São José dos Campos, o Ares Aquarius reúne 60 apartamentos em torre única. São 15 pavimentos residenciais, com quatro unidades por andar.',
-      'As duas plantas têm 3 dormitórios, sendo 1 suíte, e 2 vagas de garagem. A opção de 102,14 m² corresponde aos finais 1 e 3; a de 105,82 m², aos finais 2 e 4. Ambas incluem varanda gourmet de 11,38 m² e varanda técnica de 4,18 m², reversível para área de serviço.',
-    ],
-    neighborhood: 'Jardim Aquarius',
-    city: 'São José dos Campos, SP',
-    address: 'Rua Itajaí, 30',
-    locationContext: 'O entorno reúne referências como Colinas Shopping, Praça Ulisses Guimarães, Oba Hortifruti, Pão de Açúcar e Avenida Cassiano Ricardo.',
-    mapUrl: 'https://www.google.com/maps?q=Ares+Aquarius+-+TECVALE,+Rua+Itaja%C3%AD+30,+Jardim+Aquarius,+S%C3%A3o+Jos%C3%A9+dos+Campos&t=k&z=18',
-    status: 'Lançamento',
-    bedrooms: '3 dormitórios, 1 suíte',
-    area: '102,14 m² e 105,82 m²',
-    areaLabel: 'Área privativa',
-    parking: '2 vagas por unidade',
-    cover: { src: img('TEC_ITA_05_FACHADA 03_EF2.jpg'), alt: 'Fachada do Ares Aquarius ao entardecer, em São José dos Campos' },
-    gallery: [
-      { src: img('ares-mockup-living.png'), alt: 'Mockup ilustrativo de living para o Ares Aquarius' },
-      { src: img('ares-mockup-varanda.png'), alt: 'Mockup ilustrativo de varanda para o Ares Aquarius' },
-      { src: img('ares-mockup-bedroom.png'), alt: 'Mockup ilustrativo de dormitório para o Ares Aquarius' },
-    ],
-    featuresImage: { src: img('ares-mockup-lounge.png'), alt: 'Mockup ilustrativo de ambiente comum para o Ares Aquarius' },
-    plans: [
-      {
-        name: '102,14 m² · finais 1 e 3',
-        area: '102,14 m²',
-        bedrooms: 3,
-        suites: 1,
-        image: { src: img('ares-planta-102-14.webp'), alt: 'Planta ilustrada do apartamento de 102,14 m², finais 1 e 3' },
-        details: [
-          '3 dormitórios, sendo 1 suíte',
-          'Sala de estar e jantar e cozinha',
-          'Lavabo e banheiro social',
-          'Varanda técnica de 4,18 m², reversível para área de serviço',
-          'Varanda gourmet de 11,38 m²',
-          '2 vagas de garagem',
-        ],
-      },
-      {
-        name: '105,82 m² · finais 2 e 4',
-        area: '105,82 m²',
-        bedrooms: 3,
-        suites: 1,
-        image: { src: img('ares-planta-105-82.webp'), alt: 'Planta ilustrada do apartamento de 105,82 m², finais 2 e 4' },
-        details: [
-          '3 dormitórios, sendo 1 suíte',
-          'Hall de entrada',
-          'Sala de estar e jantar e cozinha',
-          'Lavabo e banheiro social',
-          'Varanda técnica de 4,18 m², reversível para área de serviço',
-          'Varanda gourmet de 11,38 m²',
-          '2 vagas de garagem',
-        ],
-      },
-    ],
-    features: [
-      { title: 'Brises móveis', text: 'Os painéis da fachada permitem ajustar a entrada de luz natural e a privacidade na varanda.' },
-      { title: 'Praça e conveniência no térreo', text: 'Praça central com cascata, coworking, sala de reunião e videoconferência, espaço para encomendas e pontos de recarga para veículos elétricos.' },
-      { title: 'Lazer no 16º pavimento', text: 'Salão de festas com espaço gourmet, dois belvederes, salão de jogos com American Bar e Game Station, Espaço Kids, Pet Place e Pet Care.' },
-      { title: 'Lazer no 17º pavimento', text: 'Piscinas climatizadas para adultos e crianças, deck solário, espaço gourmet com churrasqueira, fitness, espaço de estética, Espaço Zen com ofurô, sala de massagem e sauna.' },
-    ],
-    specs: [
-      { label: 'Unidades', value: '60 apartamentos' },
-      { label: 'Torre', value: 'Única' },
-      { label: 'Pavimentos residenciais', value: '15' },
-      { label: 'Unidades por andar', value: '4' },
-      { label: 'Tipologia', value: '3 dormitórios, 1 suíte' },
-      { label: 'Vagas', value: '2 por unidade' },
-      { label: 'Varanda gourmet', value: '11,38 m²' },
-      { label: 'Varanda técnica', value: '4,18 m², reversível para área de serviço' },
-    ],
-  },
-]
 
 const empreendimentosEntregues: Empreendimento[] = [
   {
@@ -383,10 +244,7 @@ const empreendimentosEntregues: Empreendimento[] = [
   },
 ]
 
-export const portfolioEmpreendimentos = [...empreendimentos, ...empreendimentosLancamentos, ...empreendimentosEntregues]
-
-export const getEmpreendimento = (slug: string | undefined) =>
-  portfolioEmpreendimentos.find((e) => e.slug === slug)
+export const portfolioEmpreendimentos = [...empreendimentosEntregues]
 
 /** Destino do botão do slide/cartão. */
 export const projectHref = (e: Empreendimento) => `/empreendimentos/${e.slug}`

@@ -49,15 +49,11 @@ export function Header() {
         <Link to="/" aria-label="Tecvale, página inicial" className="justify-self-center">
           <img src="/images/logo-tecvale-vermelho.svg" alt="Tecvale" className="w-32 md:w-40" />
         </Link>
-        <button
-          type="button"
-          aria-label="Idioma: português e inglês"
-          className="group min-h-11 justify-self-end cursor-pointer px-1 text-xs uppercase tracking-[0.12em] transition-transform active:scale-95"
-        >
-          <span className="text-ink transition-colors group-hover:text-wine">PT</span>
+        <div translate="no" aria-label="Idioma" className="flex min-h-11 items-center justify-self-end text-xs uppercase tracking-[0.12em]">
+          <a href={`${pathname}${window.location.search}${window.location.hash}`} lang="pt-BR" aria-current={window.location.pathname.startsWith('/en') ? undefined : 'page'} className={window.location.pathname.startsWith('/en') ? 'text-muted hover:text-wine' : 'text-ink'}>PT</a>
           <span aria-hidden="true" className="mx-2 text-muted">|</span>
-          <span className="text-muted transition-colors group-hover:text-wine">ENG</span>
-        </button>
+          <a href={`/en${pathname}${window.location.search}${window.location.hash}`} lang="en" aria-current={window.location.pathname.startsWith('/en') ? 'page' : undefined} className={window.location.pathname.startsWith('/en') ? 'text-ink' : 'text-muted hover:text-wine'}>EN</a>
+        </div>
       </div>
 
       {open && (

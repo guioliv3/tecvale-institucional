@@ -7,11 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "studio": "pnpm --dir studio dev",
+    "studio:deploy": "pnpm --dir studio deploy",
     "worker:dev": "pnpm build && wrangler dev",
     "worker:deploy": "pnpm build && wrangler deploy",
     "format": "oxfmt"
   },
   "dependencies": {
+    "@sanity/client": "^8.17.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^8.5.1"
@@ -25,6 +28,7 @@
     "oxfmt": "^0.76.0",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.7.0",
-    "vite": "^8.0.5"
+    "vite": "^8.0.5",
+    "wrangler": "^4.168.0"
   }
 }

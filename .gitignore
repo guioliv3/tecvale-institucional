@@ -3,6 +3,7 @@ dist/
 build/
 .cache/
 .env*
+!.env.example
 .dev.vars*
 .wrangler/
 .vite/
@@ -19,3 +20,6 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+/.taste-skill/
+.playwright-cli
+/empreendimentos/

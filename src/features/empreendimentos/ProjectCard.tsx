@@ -12,6 +12,7 @@ export function ProjectCard({ projeto: p }: { projeto: Empreendimento }) {
       <Link to={href} aria-label={`Conheça ${p.name}`} className="block focus-visible:outline-offset-4">
         <Photo
           photo={p.cover}
+          sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw"
           tag={false}
           className="aspect-[16/10] transition-opacity duration-300 hover:opacity-90 motion-reduce:transition-none"
         />

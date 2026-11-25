@@ -22,4 +22,4 @@ export const router = createBrowserRouter([
       { path: '*', Component: NotFoundPage },
     ],
   },
-])
+], { basename: window.location.pathname === '/en' || window.location.pathname.startsWith('/en/') ? '/en' : '/' })

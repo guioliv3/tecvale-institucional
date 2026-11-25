@@ -9,7 +9,10 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
+  "ai": { "binding": "AI" },
   "vars": {
-    "INSTAGRAM_FEED_MODE": "mock"
+    "INSTAGRAM_FEED_MODE": "mock",
+    "VITE_SANITY_PROJECT_ID": "nwyyn8h9",
+    "VITE_SANITY_DATASET": "production"
   }
 }

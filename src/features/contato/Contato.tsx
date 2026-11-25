@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router'
-import { getEmpreendimento } from '@/content/empreendimentos'
+import { useEmpreendimentos } from '@/features/empreendimentos/useEmpreendimentos'
 import { office } from '@/content/site'
 import { PageSectionNav } from '@/components/ui/PageSectionNav'
 import { ContactForm } from './ContactForm'
@@ -23,9 +23,10 @@ function ContactIcon({ type }: { type: 'phone' | 'mail' | 'chat' | 'pin' }) {
 }
 
 export function Contato() {
+  const { projects } = useEmpreendimentos()
   const { search } = useLocation()
   const projectSlug = new URLSearchParams(search).get('empreendimento') ?? undefined
-  const projeto = getEmpreendimento(projectSlug)
+  const projeto = projects.find((project) => project.slug === projectSlug)
 
   return (
     <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-12 md:pb-36 md:pt-20">

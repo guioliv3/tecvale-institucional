@@ -1,21 +1,22 @@
-import { getEmpreendimento } from "@/content/empreendimentos";
-import { ProvisionalTag } from "@/components/ui/ProvisionalTag";
+import { sanityImageSrcSet, sanityImageUrl } from "@/components/ui/Photo";
 import { TextLink } from "@/components/ui/TextLink";
-
-const cover = getEmpreendimento("neori-residence")!.cover;
+import { useEmpreendimentos } from "@/features/empreendimentos/useEmpreendimentos";
 
 export function SobreHero() {
+  const { projects } = useEmpreendimentos();
+  const cover = projects.find((project) => project.slug === "neori-residence")?.cover;
   return (
     <section className="frame-x mx-auto max-w-[1600px] bg-page pb-0">
       <div className="on-dark relative h-[calc(100svh-5rem-1rem)] min-h-[560px] overflow-hidden bg-ink text-white md:h-[calc(100svh-5rem-2rem)]">
-        <img
-          src={cover.src}
+        {cover && <img
+          src={sanityImageUrl(cover.src, 1600)}
+          srcSet={sanityImageSrcSet(cover.src)}
+          sizes="100vw"
           alt={cover.alt}
           className="absolute inset-0 h-full w-full object-cover brightness-[.72]"
           fetchPriority="high"
-        />
+        />}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-        <ProvisionalTag className="absolute left-4 top-4 md:left-6 md:top-6" />
         <div className="absolute inset-x-0 bottom-0 p-5 md:p-10">
           <p className="text-xs uppercase tracking-[0.16em] text-white/80">A Tecvale</p>
           <h1 className="mt-4 max-w-3xl text-4xl leading-[1.02] md:text-6xl">

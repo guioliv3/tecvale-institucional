@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import { portfolioEmpreendimentos, projectHref, type Empreendimento, type Photo } from '@/content/empreendimentos'
+import { projectHref, type Photo } from '@/content/empreendimentos'
 import { ProvisionalTag } from '@/components/ui/ProvisionalTag'
+import { sanityImageSrcSet, sanityImageUrl } from '@/components/ui/Photo'
 import { TextLink } from '@/components/ui/TextLink'
+import { useEmpreendimentos } from '@/features/empreendimentos/useEmpreendimentos'
+import { orderHomeProjects } from './homeProjects'
 
-// Projetos atualmente em obras, na ordem de destaque da Home.
-const order = ['neori-residence', 'noah', 'ares-aquarius']
-const slides = order
-  .map((slug) => portfolioEmpreendimentos.find((project) => project.slug === slug))
-  .filter((project): project is Empreendimento => project !== undefined)
-const INTERVAL = 7000
+const INTERVAL = 4000
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -32,20 +30,24 @@ export function HeroCarousel({
   description?: string
   cover?: Photo
 }) {
+  const { projects, loading } = useEmpreendimentos()
+  const activeProjects = projects.filter((project) => project.status !== 'Entregue')
+  const slides = orderHomeProjects(activeProjects).slice(0, 3)
   const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
   const [hovering, setHovering] = useState(false)
   const reduced = usePrefersReducedMotion()
-  const autoplay = !compact && !reduced && !paused && !hovering
+  const autoplay = !compact && !reduced && !hovering && slides.length > 1
+  const activeIndex = slides.length ? active % slides.length : 0
+  const current = slides[activeIndex]
   const imageSlides = compact
-    ? [{ ...slides[0], cover: cover ?? slides[0].cover }]
+    ? cover ? [{ slug: 'catalogo', name: title ?? 'Empreendimentos', cover }] : slides.slice(0, 1)
     : slides
 
   useEffect(() => {
     if (!autoplay) return
     const t = setInterval(() => setActive((i) => (i + 1) % slides.length), INTERVAL)
     return () => clearInterval(t)
-  }, [autoplay, active])
+  }, [autoplay, active, slides.length])
 
   return (
     <section
@@ -65,10 +67,10 @@ export function HeroCarousel({
             role="group"
             aria-roledescription="slide"
             aria-label={`${i + 1} de ${imageSlides.length}: ${s.name}`}
-            aria-hidden={i !== active}
-            className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${i === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+            aria-hidden={i !== activeIndex}
+            className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${i === activeIndex ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
           >
-            <img src={s.cover.src} alt={s.cover.alt} className="h-full w-full object-cover brightness-[.72]" loading={i === 0 ? 'eager' : 'lazy'} />
+            {(!loading || compact) && <img src={sanityImageUrl(s.cover.src, 1600)} srcSet={sanityImageSrcSet(s.cover.src)} sizes="100vw" alt={s.cover.alt} className="h-full w-full object-cover brightness-[.72]" loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : undefined} decoding="async" />}
           </div>
         ))}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" />
@@ -82,39 +84,25 @@ export function HeroCarousel({
                 <li key={s.slug}>
                   <button
                     type="button"
-                    aria-current={i === active}
+                    aria-current={i === activeIndex}
                     onClick={() => setActive(i)}
-                    className={`min-h-9 cursor-pointer border-b py-1 text-[10px] uppercase tracking-[0.12em] transition-opacity md:min-h-11 md:py-2 md:text-sm md:tracking-[0.16em] ${i === active ? 'border-white opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                    className={`min-h-9 cursor-pointer border-b py-1 text-[10px] uppercase tracking-[0.12em] transition-opacity md:min-h-11 md:py-2 md:text-sm md:tracking-[0.16em] ${i === activeIndex ? 'border-white opacity-100' : 'border-transparent opacity-30 hover:opacity-70 focus-visible:opacity-100'}`}
                   >
                     {s.name}
                   </button>
                 </li>
               ))}
             </ul>
-            {!reduced && (
-              <button
-                type="button"
-                onClick={() => setPaused((p) => !p)}
-                aria-label={paused ? 'Retomar avanço automático' : 'Pausar avanço automático'}
-                className="ml-auto flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center border border-white/60 hover:bg-white/15 md:ml-0 md:h-11 md:w-11"
-              >
-                {paused ? (
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor" /></svg>
-                ) : (
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z" fill="currentColor" /></svg>
-                )}
-              </button>
-            )}
           </div>}
 
           <div className="max-w-md" aria-live={autoplay ? 'off' : 'polite'}>
-            <h1 className="text-3xl md:text-6xl">{title ?? slides[active].name}</h1>
+            <h1 className="text-3xl md:text-6xl">{title ?? current?.name ?? 'Empreendimentos Tecvale'}</h1>
             <p className="mt-2 line-clamp-2 text-xs leading-snug text-white/90 md:mt-3 md:line-clamp-none md:text-base md:leading-relaxed">
-              {description ?? slides[active].summary}
+              {description ?? current?.summary ?? 'Conheça os empreendimentos da Tecvale.'}
             </p>
-            {!compact && (
+            {!compact && current && (
               <div className="mt-3 md:mt-6">
-                <TextLink to={projectHref(slides[active])} variant="light">Conhecer o projeto</TextLink>
+                <TextLink to={projectHref(current)} variant="light">Conhecer o projeto</TextLink>
               </div>
             )}
           </div>

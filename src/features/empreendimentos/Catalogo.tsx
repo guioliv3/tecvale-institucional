@@ -1,35 +1,36 @@
 import { useState } from 'react'
 import { PageSectionNav } from '@/components/ui/PageSectionNav'
-import { img, portfolioEmpreendimentos, type Empreendimento } from '@/content/empreendimentos'
+import { img, type Empreendimento } from '@/content/empreendimentos'
 import { HeroCarousel } from '@/features/home/HeroCarousel'
 import { ProjectCard } from './ProjectCard'
+import { useEmpreendimentos } from './useEmpreendimentos'
 
-const stages: {
+const stageDefinitions: {
   id: string
   title: string
   description: string
-  projects: Empreendimento[]
+  status: Empreendimento['status']
   grid: string
 }[] = [
   {
     id: 'lancamentos',
     title: 'Lançamentos',
     description: 'Novos projetos para conhecer antes do início das obras.',
-    projects: portfolioEmpreendimentos.filter((project) => project.status === 'Lançamento'),
+    status: 'Lançamento',
     grid: 'xl:grid-cols-2',
   },
   {
     id: 'em-obras',
     title: 'Em obras',
     description: 'Projetos em execução, com localização, tipologia e diferenciais para conhecer.',
-    projects: portfolioEmpreendimentos.filter((project) => project.status === 'Em obras'),
+    status: 'Em obras',
     grid: 'xl:grid-cols-2',
   },
   {
     id: 'entregues',
     title: 'Entregues',
-    description: 'Empreendimentos concluídos, organizados por local e ano de entrega.',
-    projects: portfolioEmpreendimentos.filter((project) => project.status === 'Entregue'),
+    description: 'Empreendimentos concluídos pela Tecvale.',
+    status: 'Entregue',
     grid: 'xl:grid-cols-3',
   },
 ]
@@ -44,13 +45,14 @@ const filters = [
 
 export function Catalogo() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
+  const { projects } = useEmpreendimentos()
   const activeFilters = filters.filter((filter) => selectedFilters.includes(filter.id))
-  const selectedStatuses = activeFilters.filter((filter) => filter.group === 'status').map((filter) => filter.value)
-  const selectedCities = activeFilters.filter((filter) => filter.group === 'city').map((filter) => filter.value)
-  const filteredStages = stages
+  const selectedStatuses: string[] = activeFilters.filter((filter) => filter.group === 'status').map((filter) => filter.value)
+  const selectedCities: string[] = activeFilters.filter((filter) => filter.group === 'city').map((filter) => filter.value)
+  const filteredStages = stageDefinitions
     .map((stage) => ({
       ...stage,
-      projects: stage.projects.filter((project) =>
+      projects: projects.filter((project) => project.status === stage.status).filter((project) =>
         (!selectedStatuses.length || selectedStatuses.includes(project.status)) &&
         (!selectedCities.length || selectedCities.includes(project.city)),
       ),
@@ -69,7 +71,7 @@ export function Catalogo() {
         compact
         title="Empreendimentos"
         cover={{ src: img('concreto.jpg'), alt: 'Detalhe de arquitetura em concreto (imagem ilustrativa).' }}
-        description="Conheça os projetos em obras e entregues pela Tecvale. Compare localização, tipologia, área e etapa."
+        description="Conheça os lançamentos, projetos em obras e empreendimentos entregues pela Tecvale. Compare localização, tipologia, área e etapa."
       />
 
       <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-14 md:pb-36 md:pt-24">

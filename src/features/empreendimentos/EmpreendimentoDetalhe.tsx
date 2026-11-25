@@ -1,38 +1,90 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import type { Empreendimento, Plan } from '@/content/empreendimentos'
-import { portfolioEmpreendimentos } from '@/content/empreendimentos'
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { PageSectionNav, type PageSection } from '@/components/ui/PageSectionNav'
-import { Photo } from '@/components/ui/Photo'
+import { Photo, sanityImageUrl } from '@/components/ui/Photo'
 import { ProjectCard } from './ProjectCard'
+import { ProjectImageGallery } from './ProjectImageGallery'
 import { PlanDiagram } from './PlanDiagram'
 
-function getRelatedProjects(project: Empreendimento) {
-  const explicit = (project.relatedSlugs ?? [])
-    .map((slug) => portfolioEmpreendimentos.find((item) => item.slug === slug))
-    .filter((item): item is Empreendimento => Boolean(item))
-  const otherProjects = portfolioEmpreendimentos.filter((item) => item.slug !== project.slug)
-  const inSameNeighborhood = otherProjects.filter(
-    (item) => project.neighborhood && item.neighborhood === project.neighborhood,
-  )
-  const inSameCity = otherProjects.filter(
-    (item) => project.city && item.city === project.city && !inSameNeighborhood.includes(item),
-  )
-
-  return [...explicit, ...inSameNeighborhood, ...inSameCity, ...otherProjects]
-    .filter((item, index, list) => item.slug !== project.slug && list.findIndex(({ slug }) => slug === item.slug) === index)
+function getRelatedProjects(project: Empreendimento, portfolioEmpreendimentos: Empreendimento[]) {
+  return portfolioEmpreendimentos
+    .filter((item) => item.slug !== project.slug)
+    .sort((a, b) =>
+      (b.createdAt ?? '').localeCompare(a.createdAt ?? '')
+      || portfolioEmpreendimentos.indexOf(b) - portfolioEmpreendimentos.indexOf(a),
+    )
     .slice(0, 3)
 }
 
-function PlansSection({ plans }: { plans: Plan[] }) {
+function PlanZoomViewer({ plan }: { plan: Plan }) {
+  const imageRef = useRef<HTMLImageElement>(null)
+  const dragRef = useRef<{ x: number; y: number; left: number; top: number } | null>(null)
+  const [zoom, setZoom] = useState(1)
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+
+  if (!plan.image) return null
+
+  function changeZoom(nextZoom: number) {
+    setZoom(nextZoom)
+    const image = imageRef.current
+    if (!image) return
+    const maxX = image.clientWidth * (nextZoom - 1) / 2
+    const maxY = image.clientHeight * (nextZoom - 1) / 2
+    setOffset((current) => ({
+      x: Math.max(-maxX, Math.min(maxX, current.x)),
+      y: Math.max(-maxY, Math.min(maxY, current.y)),
+    }))
+  }
+
+  return (
+    <div className="relative h-full w-full overflow-hidden" aria-label={`Planta de ${plan.name}`}>
+      <img
+        ref={imageRef}
+        src={sanityImageUrl(plan.image.src, 2400)}
+        alt={plan.image.alt}
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className={`h-full w-full select-none object-contain ${zoom > 1 ? 'cursor-grab active:cursor-grabbing' : ''}`}
+        style={{ transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`, touchAction: zoom > 1 ? 'none' : 'auto' }}
+        onPointerDown={(event) => {
+          if (zoom === 1) return
+          dragRef.current = { x: event.clientX, y: event.clientY, left: offset.x, top: offset.y }
+          event.currentTarget.setPointerCapture(event.pointerId)
+        }}
+        onPointerMove={(event) => {
+          const drag = dragRef.current
+          const image = imageRef.current
+          if (!drag || !image) return
+          const maxX = image.clientWidth * (zoom - 1) / 2
+          const maxY = image.clientHeight * (zoom - 1) / 2
+          setOffset({
+            x: Math.max(-maxX, Math.min(maxX, drag.left + event.clientX - drag.x)),
+            y: Math.max(-maxY, Math.min(maxY, drag.top + event.clientY - drag.y)),
+          })
+        }}
+        onPointerUp={() => { dragRef.current = null }}
+        onPointerCancel={() => { dragRef.current = null }}
+      />
+      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-ink/95 p-1 text-white shadow-lg" role="group" aria-label="Zoom da planta">
+        <button type="button" onClick={() => changeZoom(Math.max(1, zoom - 0.5))} disabled={zoom === 1} aria-label="Reduzir planta" className="flex size-10 items-center justify-center rounded-full text-xl leading-none hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine disabled:opacity-40">−</button>
+        <button type="button" onClick={() => changeZoom(1)} disabled={zoom === 1} aria-label="Restaurar tamanho da planta" className="min-w-14 px-1 text-xs tabular-nums focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine disabled:opacity-70">{Math.round(zoom * 100)}%</button>
+        <button type="button" onClick={() => changeZoom(Math.min(4, zoom + 0.5))} disabled={zoom === 4} aria-label="Ampliar planta" className="flex size-10 items-center justify-center rounded-full text-xl leading-none hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine disabled:opacity-40">+</button>
+      </div>
+    </div>
+  )
+}
+
+function PlansSection({ plans, illustrative }: { plans: Plan[]; illustrative?: boolean }) {
   const [selectedName, setSelectedName] = useState(plans[0]?.name)
   const selectedPlan = plans.find((plan) => plan.name === selectedName) ?? plans[0]
 
   if (!selectedPlan) return null
 
   return (
-    <section id="plantas" aria-labelledby="plantas-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+    <section id="plantas" aria-labelledby="plantas-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
       <h2 id="plantas-title" className="max-w-3xl text-3xl md:text-5xl">Plantas pensadas para cada rotina.</h2>
       <p className="mt-4 max-w-2xl leading-relaxed text-muted">
         Consulte as tipologias e áreas divulgadas para este empreendimento.
@@ -52,26 +104,26 @@ function PlansSection({ plans }: { plans: Plan[] }) {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-center">
-        <div id="planta-selecionada" className="flex aspect-[10/7] items-center justify-center bg-surface p-6 md:p-10">
+      <div className="project-detail-plan-layout mt-8 grid gap-8">
+        <div id="planta-selecionada" className="project-detail-plan-visual flex items-center justify-center bg-surface p-6 md:p-8">
           {selectedPlan.image ? (
-            <img src={selectedPlan.image.src} alt={selectedPlan.image.alt} className="h-full w-full object-contain" />
+            <PlanZoomViewer key={selectedPlan.name} plan={selectedPlan} />
           ) : (
             <PlanDiagram />
           )}
         </div>
         <div>
-          <h3 className="font-serif text-3xl">{selectedPlan.name}</h3>
-          <dl className="mt-6 divide-y divide-ink/15 border-y border-ink/15">
-            <div className="flex justify-between gap-4 py-3">
+          <h3 className="font-serif text-2xl leading-snug">{selectedPlan.name}</h3>
+          <dl className="mt-4 divide-y divide-ink/15 border-y border-ink/15">
+            <div className="flex justify-between gap-4 py-2.5">
               <dt className="text-sm text-muted">Área</dt>
               <dd className="text-right text-sm">{selectedPlan.area}</dd>
             </div>
-            <div className="flex justify-between gap-4 py-3">
+            <div className="flex justify-between gap-4 py-2.5">
               <dt className="text-sm text-muted">Dormitórios</dt>
               <dd className="text-right text-sm">{selectedPlan.bedrooms}</dd>
             </div>
-            <div className="flex justify-between gap-4 py-3">
+            <div className="flex justify-between gap-4 py-2.5">
               <dt className="text-sm text-muted">Suítes</dt>
               <dd className="text-right text-sm">{selectedPlan.suites}</dd>
             </div>
@@ -80,18 +132,18 @@ function PlansSection({ plans }: { plans: Plan[] }) {
             <p className="mt-4 text-xs leading-relaxed text-muted">Esquema provisório. A planta oficial será exibida quando estiver disponível.</p>
           )}
           {selectedPlan.details && selectedPlan.details.length > 0 && (
-            <ul className="mt-6 divide-y divide-ink/10 border-t border-ink/15 text-sm leading-relaxed text-muted">
-              {selectedPlan.details.map((detail) => <li key={detail} className="py-2">{detail}</li>)}
+            <ul className="mt-4 divide-y divide-ink/10 border-t border-ink/15 text-sm leading-relaxed text-muted">
+              {selectedPlan.details.map((detail) => <li key={detail} className="py-1.5">{detail}</li>)}
             </ul>
           )}
         </div>
       </div>
-      <p className="mt-5 text-xs leading-relaxed text-muted">Plantas ilustrativas.</p>
+      {illustrative && <p className="mt-5 text-xs leading-relaxed text-muted">Plantas ilustrativas.</p>}
     </section>
   )
 }
 
-export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento }) {
+export function EmpreendimentoDetalhe({ projeto: p, portfolio }: { projeto: Empreendimento; portfolio: Empreendimento[] }) {
   const heroRef = useRef<HTMLDivElement>(null)
   const [menuVisible, setMenuVisible] = useState(false)
   const contactHref = `/contato?empreendimento=${p.slug}`
@@ -100,7 +152,8 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
   const mapHref = p.mapUrl ?? (mapQuery
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
     : undefined)
-  const relatedProjects = getRelatedProjects(p)
+  const relatedProjects = getRelatedProjects(p, portfolio)
+  const featurePhotos = p.featuresGallery?.length ? p.featuresGallery : p.featuresImage ? [p.featuresImage] : []
   const unitCount = p.specs.find((spec) => spec.label.toLowerCase() === 'unidades')?.value
   const quickFacts = [
     ...(p.bedrooms ? [{ label: 'Tipologia', value: p.bedrooms }] : []),
@@ -111,7 +164,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
   const sections: PageSection[] = [
     { id: 'apresentacao', label: 'Apresentação' },
     ...(p.gallery.length > 0 ? [{ id: 'galeria', label: 'Galeria' }] : []),
-    ...(p.features.length > 0 || p.featuresImage ? [{ id: 'diferenciais', label: 'Diferenciais e lazer' }] : []),
+    ...(p.features.length > 0 || featurePhotos.length > 0 ? [{ id: 'diferenciais', label: 'Diferenciais e lazer' }] : []),
     ...(p.plans.length > 0 ? [{ id: 'plantas', label: 'Plantas e tipologias' }] : []),
     { id: 'localizacao', label: 'Localização' },
     { id: 'etapa', label: 'Etapa e ficha técnica' },
@@ -148,25 +201,30 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
       </div>
 
       <div className="frame-x mx-auto max-w-[1600px] pb-24 pt-8 md:pb-36 md:pt-10">
-        <div className="grid gap-8 border-t border-ink/15 pt-6 md:grid-cols-[150px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-8">
-          <div className="min-w-0 md:sticky md:top-32 md:h-fit">
-            <PageSectionNav title="Neste empreendimento" sections={sections} visible={menuVisible} />
+        <div className="project-detail-layout grid gap-8 border-t border-ink/15 pt-6">
+          <div className="project-detail-nav min-w-0">
+            <PageSectionNav title="Neste empreendimento" sections={sections} visible={menuVisible} sidebarAt="xl" />
           </div>
 
           <main className="min-w-0">
-            <section id="apresentacao" aria-labelledby="apresentacao-title" className="scroll-mt-28 pb-14 md:pb-20">
-              <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:gap-14">
+            <section id="apresentacao" aria-labelledby="apresentacao-title" className="scroll-mt-28 pb-20 md:pb-28">
+              <div className="grid gap-8 sm:grid-cols-2 sm:gap-x-10 md:gap-x-14 xl:gap-x-16">
                 <div>
-                  <h2 id="apresentacao-title" className="max-w-2xl text-3xl leading-tight md:text-5xl">{p.tagline}</h2>
-                  <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted md:text-base">{p.summary}</p>
+                  <h2 id="apresentacao-title" className="max-w-2xl text-3xl leading-tight md:text-4xl xl:text-5xl">{p.tagline}</h2>
+                  <p className="mt-5 max-w-[65ch] text-sm leading-relaxed text-muted md:text-base">{p.summary}</p>
+                  {p.landingPageUrl && /^https?:\/\//i.test(p.landingPageUrl) && (
+                    <a href={p.landingPageUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-11 items-center gap-2 border-b border-wine text-sm text-wine transition-colors hover:text-wine-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wine">
+                      Acessar a landing page do empreendimento <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
                 </div>
-                <div className="space-y-4 text-sm leading-relaxed text-muted md:text-base">
+                <div className="max-w-[65ch] space-y-5 text-sm leading-relaxed text-muted md:text-base">
                   {p.presentation.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                 </div>
               </div>
 
               {quickFacts.length > 0 && (
-                <dl className="mt-10 grid grid-cols-2 gap-x-5 border-y border-ink/15 py-5 sm:grid-cols-4 md:mt-14 md:gap-x-8 md:py-7">
+                <dl className="project-detail-facts mt-10 grid gap-x-5 border-y border-ink/15 py-5 md:mt-14 md:gap-x-8 md:py-7">
                   {quickFacts.map(({ label, value }) => (
                     <div key={label} className="py-2">
                       <dt className="text-[10px] uppercase tracking-[0.14em] text-muted">{label}</dt>
@@ -178,26 +236,18 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
             </section>
 
             {p.gallery.length > 0 && (
-              <section id="galeria" aria-labelledby="galeria-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+              <section id="galeria" aria-labelledby="galeria-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
                 <h2 id="galeria-title" className="text-3xl md:text-5xl">Galeria arquitetônica.</h2>
-                <div className="mt-8 grid gap-2 md:h-[22rem] md:grid-cols-3 md:grid-rows-2 xl:h-[26rem]">
-                  {p.gallery.map((photo, index) => (
-                    <Photo
-                      key={photo.src}
-                      photo={photo}
-                      className={index === 0 ? 'aspect-[16/9] md:col-span-2 md:row-span-2 md:aspect-auto' : 'aspect-[16/9] md:aspect-auto'}
-                    />
-                  ))}
-                </div>
-                <p className="mt-4 text-xs leading-relaxed text-muted">Mockups ilustrativos para validação visual; não representam imagens ou especificações oficiais do empreendimento.</p>
+                <div className="mt-8"><ProjectImageGallery key={p.slug} photos={p.gallery} variant="architectural" illustrative={p.illustrativeMedia} /></div>
+                {p.illustrativeMedia && <p className="mt-4 text-xs leading-relaxed text-muted">Mockups ilustrativos para validação visual; não representam imagens ou especificações oficiais do empreendimento.</p>}
               </section>
             )}
 
-            {(p.features.length > 0 || p.featuresImage) && (
-              <section id="diferenciais" aria-labelledby="diferenciais-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+            {(p.features.length > 0 || featurePhotos.length > 0) && (
+              <section id="diferenciais" aria-labelledby="diferenciais-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
                 <h2 id="diferenciais-title" className="max-w-3xl text-3xl md:text-5xl">Diferenciais e áreas de lazer.</h2>
-                <div className="mt-8 grid gap-3 md:grid-cols-2 md:items-stretch md:gap-5">
-                  {p.featuresImage && <Photo photo={p.featuresImage} className="aspect-[4/3] md:aspect-auto md:min-h-64" />}
+                <div className={`mt-8 grid gap-3 md:gap-5 ${featurePhotos.length && p.features.length ? 'md:grid-cols-2' : ''}`}>
+                  {featurePhotos.length > 0 && <ProjectImageGallery key={p.slug} photos={featurePhotos} variant="features" illustrative={p.illustrativeMedia} />}
                   {p.features.length > 0 ? (
                     <ul className="grid gap-x-8 sm:grid-cols-2">
                       {p.features.map((feature) => (
@@ -207,21 +257,21 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
                         </li>
                       ))}
                     </ul>
-                  ) : (
+                  ) : p.illustrativeMedia ? (
                     <div className="flex flex-col justify-center bg-surface px-6 py-8 md:px-8">
                       <p className="text-[10px] uppercase tracking-[0.16em] text-wine">Prévia ilustrativa</p>
                       <p className="mt-3 max-w-lg font-serif text-2xl leading-snug">Uma referência visual para imaginar os espaços do empreendimento.</p>
                       <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted">Os diferenciais e itens de lazer serão apresentados após a validação das informações oficiais.</p>
                     </div>
-                  )}
+                  ) : null}
                 </div>
-                {p.featuresImage && <p className="mt-4 text-xs leading-relaxed text-muted">Imagem ilustrativa dos ambientes. Consulte a equipe comercial para confirmar as especificações do empreendimento.</p>}
+                {featurePhotos.length > 0 && p.illustrativeMedia && <p className="mt-4 text-xs leading-relaxed text-muted">Imagens ilustrativas dos ambientes. Consulte a equipe comercial para confirmar as especificações do empreendimento.</p>}
               </section>
             )}
 
-            {p.plans.length > 0 && <PlansSection key={p.slug} plans={p.plans} />}
+            {p.plans.length > 0 && <PlansSection key={p.slug} plans={p.plans} illustrative={p.illustrativeMedia} />}
 
-            <section id="localizacao" aria-labelledby="localizacao-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+            <section id="localizacao" aria-labelledby="localizacao-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
               <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-12">
                 <div>
                   <h2 id="localizacao-title" className="text-3xl md:text-5xl">{p.neighborhood ? `No ${p.neighborhood}.` : 'Localização do empreendimento.'}</h2>
@@ -254,7 +304,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
               </div>
             </section>
 
-            <section id="etapa" aria-labelledby="etapa-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+            <section id="etapa" aria-labelledby="etapa-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
               <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-12">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.16em] text-wine">{p.status}</p>
@@ -297,13 +347,15 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
               </div>
             </section>
 
-            <section id="contato-comercial" aria-labelledby="contato-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+            <section id="contato-comercial" aria-labelledby="contato-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
               <div className="bg-wine px-6 py-12 text-white md:px-10 md:py-16">
                 <h2 id="contato-title" className="max-w-3xl text-3xl md:text-5xl">Quer saber mais sobre o {p.name}?</h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/85 md:text-base">
                   Fale com a equipe comercial para consultar informações, disponibilidade e próximos passos.
                 </p>
-                <div className="mt-7"><ButtonLink to={contactHref} variant="light">Falar com a equipe</ButtonLink></div>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <ButtonLink to={contactHref} variant="light">Falar com a equipe</ButtonLink>
+                </div>
               </div>
               <p className="mt-5 text-sm">
                 <Link to="/empreendimentos" className="inline-flex min-h-11 items-center text-wine underline underline-offset-4 transition-colors hover:text-wine-dark">Ver todos os empreendimentos</Link>
@@ -311,7 +363,7 @@ export function EmpreendimentoDetalhe({ projeto: p }: { projeto: Empreendimento 
             </section>
 
             {relatedProjects.length > 0 && (
-              <section id="relacionados" aria-labelledby="relacionados-title" className="scroll-mt-28 border-t border-ink/15 py-14 md:py-20">
+              <section id="relacionados" aria-labelledby="relacionados-title" className="scroll-mt-28 border-t border-ink/15 py-20 md:py-28">
                 <div className="flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.16em] text-wine">Portfólio Tecvale</p>

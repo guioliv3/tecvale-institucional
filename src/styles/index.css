@@ -91,6 +91,45 @@
   }
 }
 
+@layer components {
+  .project-detail-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-detail-plan-visual {
+    height: 28rem;
+  }
+
+  @media (min-width: 40rem) {
+    .project-detail-facts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .project-detail-plan-layout {
+      grid-template-columns: minmax(0, min(60%, 40rem)) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .project-detail-plan-visual {
+      height: 36rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .project-detail-layout {
+      grid-template-columns: 180px minmax(0, 1fr);
+    }
+
+    .project-detail-nav {
+      position: sticky;
+      top: 8rem;
+      align-self: start;
+    }
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

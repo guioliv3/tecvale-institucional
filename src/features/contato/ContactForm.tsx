@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react'
 import type { Empreendimento } from '@/content/empreendimentos'
-import { portfolioEmpreendimentos } from '@/content/empreendimentos'
 import { office } from '@/content/site'
+import { useEmpreendimentos } from '@/features/empreendimentos/useEmpreendimentos'
 import { maskPhone, validate, type ContactErrors, type ContactValues } from './validate'
 
 type ContactIntent = 'geral' | 'empreendimentos' | 'clientes'
@@ -19,6 +19,7 @@ const fieldCls = (err?: string, quick = false) => quick
   : `mt-2 w-full border bg-white px-4 py-3 text-base focus:border-wine ${err ? 'border-wine' : 'border-ink/20'}`
 
 export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimento; quick?: boolean }) {
+  const { projects: portfolio } = useEmpreendimentos()
   const [values, setValues] = useState(empty)
   const [errors, setErrors] = useState<ContactErrors>({})
   const [intent, setIntent] = useState<ContactIntent>(projeto ? 'empreendimentos' : 'geral')
@@ -28,7 +29,7 @@ export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimen
   const formRef = useRef<HTMLFormElement>(null)
   const doneRef = useRef<HTMLDivElement>(null)
   const selectedIntent = intents.find((option) => option.id === intent)!
-  const selectedProject = portfolioEmpreendimentos.find((project) => project.slug === projectSlug)
+  const selectedProject = portfolio.find((project) => project.slug === projectSlug) ?? (projectSlug === projeto?.slug ? projeto : undefined)
 
   const set = (key: keyof ContactValues, value: string) => {
     setValues((current) => ({ ...current, [key]: value }))
@@ -154,7 +155,7 @@ export function ContactForm({ projeto, quick = false }: { projeto?: Empreendimen
             className={`${fieldCls()} cursor-pointer`}
           >
             <option value="">Selecione um empreendimento</option>
-            {portfolioEmpreendimentos.map((project) => (
+            {portfolio.map((project) => (
               <option key={project.slug} value={project.slug}>{project.name}</option>
             ))}
           </select>

@@ -3,7 +3,9 @@ import { Outlet, useLocation } from "react-router";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { FloatingWhatsApp } from "./FloatingWhatsApp";
-import { getEmpreendimento } from "@/content/empreendimentos";
+import { useEmpreendimentos } from "@/features/empreendimentos/useEmpreendimentos";
+import { office } from "@/content/site";
+import { translatePage } from "@/features/i18n/translatePage";
 
 const siteUrl = "https://tecvaleconstrutora.com.br";
 
@@ -37,12 +39,24 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
 
 export function RootLayout() {
   const { pathname } = useLocation();
+  const english = window.location.pathname === "/en" || window.location.pathname.startsWith("/en/");
+  const { projects, loading: projectsLoading } = useEmpreendimentos(english || pathname.startsWith("/empreendimentos/"));
+  useEffect(() => {
+    document.documentElement.lang = english ? "en" : "pt-BR";
+    if (!english || projectsLoading) return;
+    return translatePage([
+      "Tecvale", "Tecvale Construtora e Incorporadora Ltda.", "CNPJ", "WhatsApp",
+      office.address, office.city, office.email,
+      "São José dos Campos", "Jacareí", "Taubaté", "Vale do Paraíba",
+      ...projects.flatMap((project) => [project.name, project.neighborhood, project.city, project.address ?? ""]),
+    ]);
+  }, [english, projects, projectsLoading]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
   useEffect(() => {
     const project = pathname.startsWith("/empreendimentos/")
-      ? getEmpreendimento(pathname.split("/").filter(Boolean).at(-1))
+      ? projects.find((item) => item.slug === pathname.split("/").filter(Boolean).at(-1))
       : undefined;
     const metadata = project
       ? { title: `${project.name} | Tecvale`, description: project.summary }
@@ -63,7 +77,7 @@ export function RootLayout() {
     document
       .querySelector('meta[name="twitter:description"]')
       ?.setAttribute("content", metadata.description);
-    const socialImageUrl = new URL(project?.cover.src ?? "/images/neori-interior-option.jpg", siteUrl).href;
+    const socialImageUrl = new URL(project?.cover.src ?? "/images/concreto.jpg", siteUrl).href;
     const socialImageAlt =
       project?.cover.alt ?? "Imagem ilustrativa de empreendimento residencial da Tecvale";
     document.querySelector('meta[property="og:image"]')?.setAttribute("content", socialImageUrl);
@@ -75,12 +89,20 @@ export function RootLayout() {
       .querySelector('meta[name="twitter:image:alt"]')
       ?.setAttribute("content", socialImageAlt);
 
-    const canonicalUrl = new URL(pathname, siteUrl).href;
+    const canonicalUrl = new URL(`${english ? "/en" : ""}${pathname}`, siteUrl).href;
     document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonicalUrl);
     document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonicalUrl);
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((link) => link.remove());
+    for (const [language, prefix] of [["pt-BR", ""], ["en", "/en"]]) {
+      const alternate = document.createElement("link");
+      alternate.rel = "alternate";
+      alternate.hreflang = language;
+      alternate.href = new URL(`${prefix}${pathname}`, siteUrl).href;
+      document.head.append(alternate);
+    }
 
     const schemaId = "page-structured-data";
-    const schemaScript = document.getElementById(schemaId) ?? document.createElement("script");
+    const schemaScript = document.querySelector<HTMLScriptElement>(`#${schemaId}`) ?? document.createElement("script");
     if (pathname === "/sobre") {
       schemaScript.id = schemaId;
       schemaScript.type = "application/ld+json";
@@ -90,7 +112,7 @@ export function RootLayout() {
         name: metadata.title,
         description: metadata.description,
         url: canonicalUrl,
-        inLanguage: "pt-BR",
+        inLanguage: english ? "en" : "pt-BR",
         mainEntity: {
           "@type": "Organization",
           name: "Tecvale Construtora e Incorporadora",
@@ -102,7 +124,7 @@ export function RootLayout() {
     } else {
       schemaScript.remove();
     }
-  }, [pathname]);
+  }, [pathname, projects, english]);
   return (
     <>
       <a
