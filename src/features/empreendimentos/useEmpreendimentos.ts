@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { portfolioEmpreendimentos, type Empreendimento } from '@/content/empreendimentos'
-import { fetchPortfolioEmpreendimentos, hasSanityPortfolio } from '@/content/empreendimentosSanity'
+import { fetchHomeHeroProjectSlug, fetchPortfolioEmpreendimentos, hasSanityPortfolio } from '@/content/empreendimentosSanity'
 
 export function useEmpreendimentos(enabled = true) {
   const [projects, setProjects] = useState<Empreendimento[]>(portfolioEmpreendimentos)
+  const [homeHeroProjectSlug, setHomeHeroProjectSlug] = useState<string>()
   const [loading, setLoading] = useState(enabled && hasSanityPortfolio)
 
   useEffect(() => {
@@ -14,10 +15,18 @@ export function useEmpreendimentos(enabled = true) {
         if (active) setProjects(loadedProjects)
       })
       .catch((error: unknown) => {
-        console.error('Não foi possível carregar os empreendimentos do Sanity.', error)
+        console.error('Failed to load Sanity projects.', error)
       })
       .finally(() => {
         if (active) setLoading(false)
+      })
+
+    fetchHomeHeroProjectSlug()
+      .then((slug) => {
+        if (active) setHomeHeroProjectSlug(slug)
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to load the hero highlight from Sanity.', error)
       })
 
     return () => {
@@ -25,5 +34,5 @@ export function useEmpreendimentos(enabled = true) {
     }
   }, [enabled])
 
-  return { projects, loading }
+  return { projects, loading, homeHeroProjectSlug }
 }

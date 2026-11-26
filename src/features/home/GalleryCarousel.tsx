@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { img } from '@/content/empreendimentos'
-import { ProvisionalTag } from '@/components/ui/ProvisionalTag'
 
-// Imagens ilustrativas provisórias. `ratio` e `offset` criam o desalinhamento vertical do carrossel.
+// `ratio` e `offset` criam o desalinhamento vertical do carrossel.
 const items = [
-  { file: 'sala-4.jpg', alt: 'Quarto claro com janela (imagem ilustrativa)', ratio: '1/1', offset: 'md:mt-10' },
-  { file: 'sala-1.jpg', alt: 'Sala com grande janela para a paisagem (imagem ilustrativa)', ratio: '3/4', offset: 'md:mt-0' },
-  { file: 'concreto.jpg', alt: 'Detalhe de arquitetura em concreto (imagem ilustrativa)', ratio: '4/5', offset: 'md:mt-10' },
-  { file: 'sala-2.jpg', alt: 'Sala de estar em tons neutros (imagem ilustrativa)', ratio: '1/1', offset: 'md:mt-4' },
-  { file: 'fachada-1.jpg', alt: 'Casa cercada de vegetação (imagem ilustrativa)', ratio: '3/4', offset: 'md:mt-0' },
-  { file: 'casa-2.jpg', alt: 'Casa com revestimento em pedra (imagem ilustrativa)', ratio: '4/5', offset: 'md:mt-12' },
-  { file: 'sala-3.jpg', alt: 'Living integrado (imagem ilustrativa)', ratio: '1/1', offset: 'md:mt-2' },
-  { file: 'casa-1.jpg', alt: 'Residência com varandas (imagem ilustrativa)', ratio: '3/4', offset: 'md:mt-0' },
+  { file: 'ares-fachada.webp', alt: 'Perspectiva da fachada do Ares Aquarius ao entardecer', project: 'Ares Aquarius', status: 'Lançamento', ratio: '1/1', offset: 'md:mt-10' },
+  { file: 'ares-hall.webp', alt: 'Hall de entrada do Ares Aquarius', project: 'Ares Aquarius', status: 'Lançamento', ratio: '3/4', offset: 'md:mt-0' },
+  { file: 'ares-coworking.webp', alt: 'Espaço de coworking do Ares Aquarius', project: 'Ares Aquarius', status: 'Lançamento', ratio: '4/5', offset: 'md:mt-10' },
+  { file: 'noah-fachada.webp', alt: 'Perspectiva da fachada e entrada do Noah Residence', project: 'Noah Residence', status: 'Em obras', groupStart: true, ratio: '1/1', offset: 'md:mt-4' },
+  { file: 'noah-living.webp', alt: 'Perspectiva da sala de estar do Noah Residence', project: 'Noah Residence', status: 'Em obras', ratio: '3/4', offset: 'md:mt-0' },
+  { file: 'noah-varanda.webp', alt: 'Perspectiva da varanda do apartamento no Noah Residence', project: 'Noah Residence', status: 'Em obras', ratio: '4/5', offset: 'md:mt-12' },
+  { file: 'neori-fachada.webp', alt: 'Perspectiva da fachada do Neori Jardim Aquarius', project: 'Neori Jardim Aquarius', status: 'Em obras', groupStart: true, ratio: '1/1', offset: 'md:mt-2' },
+  { file: 'neori-varanda.webp', alt: 'Perspectiva da varanda gourmet do Neori Jardim Aquarius', project: 'Neori Jardim Aquarius', status: 'Em obras', ratio: '3/4', offset: 'md:mt-0' },
+  { file: 'neori-cozinha.webp', alt: 'Perspectiva da cozinha do Neori Jardim Aquarius', project: 'Neori Jardim Aquarius', status: 'Em obras', ratio: '4/5', offset: 'md:mt-10' },
 ]
 
 export function GalleryCarousel() {
@@ -71,11 +71,13 @@ export function GalleryCarousel() {
         {items.map((it) => (
           <figure
             key={it.file}
-            className={`relative w-[62vw] shrink-0 snap-start overflow-hidden bg-surface md:w-[calc((100vw-4rem-8rem)/5)] ${it.offset}`}
+            className={`relative w-[62vw] shrink-0 snap-start overflow-hidden bg-surface md:w-[calc((100vw-4rem-8rem)/5)] ${it.groupStart ? 'ml-5 md:ml-10' : ''} ${it.offset}`}
             style={{ aspectRatio: it.ratio }}
           >
             <img src={img(it.file)} alt={it.alt} draggable={false} loading="lazy" className="h-full w-full object-cover" />
-            <ProvisionalTag className="absolute left-2 top-2 !text-[9px]">Provisória</ProvisionalTag>
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent px-3 pb-3 pt-10 text-white md:px-4 md:pb-4">
+              <span className="block text-xs leading-tight md:text-sm">{it.project}</span>
+            </figcaption>
           </figure>
         ))}
       </div>

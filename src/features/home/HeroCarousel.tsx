@@ -30,18 +30,29 @@ export function HeroCarousel({
   description?: string
   cover?: Photo
 }) {
-  const { projects, loading } = useEmpreendimentos()
-  const activeProjects = projects.filter((project) => project.status !== 'Entregue')
-  const slides = orderHomeProjects(activeProjects).slice(0, 3)
+  const { projects, loading, homeHeroProjectSlug } = useEmpreendimentos()
+  const activeProjects = orderHomeProjects(projects.filter((project) => project.status !== 'Entregue'))
+  const featuredProject = homeHeroProjectSlug
+    ? projects.find((project) => project.slug === homeHeroProjectSlug)
+    : undefined
+  const slides = (featuredProject
+    ? [featuredProject, ...activeProjects.filter((project) => project.slug !== featuredProject.slug)]
+    : activeProjects
+  ).slice(0, 3)
   const [active, setActive] = useState(0)
   const [hovering, setHovering] = useState(false)
   const reduced = usePrefersReducedMotion()
   const autoplay = !compact && !reduced && !hovering && slides.length > 1
   const activeIndex = slides.length ? active % slides.length : 0
+  const slideOrder = slides.map(({ slug }) => slug).join('|')
   const current = slides[activeIndex]
   const imageSlides = compact
     ? cover ? [{ slug: 'catalogo', name: title ?? 'Empreendimentos', cover }] : slides.slice(0, 1)
     : slides
+
+  useEffect(() => {
+    setActive(0)
+  }, [slideOrder])
 
   useEffect(() => {
     if (!autoplay) return

@@ -45,8 +45,10 @@ const detailFields = `${summaryFields},
 
 const summaryQuery = `*[_type == "empreendimento" && defined(slug.current)] | order(_createdAt desc) {${summaryFields}}`
 const detailQuery = `*[_type == "empreendimento" && slug.current == $slug][0] {${detailFields}}`
+const homeHeroProjectQuery = '*[_type == "siteSettings" && _id == "siteSettings"][0]{"projectSlug": homeHeroProject->slug.current}'
 
 type SanityPhoto = { src?: string | null; alt?: string | null } | null
+type HomeHeroSettings = { projectSlug?: string }
 type SanityProject = {
   name?: string
   slug?: string
@@ -142,6 +144,19 @@ function mapProject(project: SanityProject): Empreendimento | undefined {
 }
 
 let portfolioRequest: Promise<Empreendimento[]> | undefined
+let homeHeroProjectRequest: Promise<string | undefined> | undefined
+
+export function fetchHomeHeroProjectSlug(): Promise<string | undefined> {
+  if (!client) return Promise.resolve(undefined)
+
+  homeHeroProjectRequest ??= client.fetch<HomeHeroSettings | null>(homeHeroProjectQuery)
+    .then((settings) => settings?.projectSlug)
+    .catch((error: unknown) => {
+      homeHeroProjectRequest = undefined
+      throw error
+    })
+  return homeHeroProjectRequest
+}
 
 export function fetchPortfolioEmpreendimentos(): Promise<Empreendimento[]> {
   if (!client) return Promise.resolve(portfolioEmpreendimentos)

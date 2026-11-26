@@ -1,21 +1,16 @@
-import { sanityImageSrcSet, sanityImageUrl } from "@/components/ui/Photo";
+import { img } from "@/content/empreendimentos";
 import { TextLink } from "@/components/ui/TextLink";
-import { useEmpreendimentos } from "@/features/empreendimentos/useEmpreendimentos";
 
 export function SobreHero() {
-  const { projects } = useEmpreendimentos();
-  const cover = projects.find((project) => project.slug === "neori-residence")?.cover;
   return (
     <section className="frame-x mx-auto max-w-[1600px] bg-page pb-0">
       <div className="on-dark relative h-[calc(100svh-5rem-1rem)] min-h-[560px] overflow-hidden bg-ink text-white md:h-[calc(100svh-5rem-2rem)]">
-        {cover && <img
-          src={sanityImageUrl(cover.src, 1600)}
-          srcSet={sanityImageSrcSet(cover.src)}
-          sizes="100vw"
-          alt={cover.alt}
+        <img
+          src={img("region-2.webp")}
+          alt="Vista aérea da região do Ares Aquarius, em São José dos Campos"
           className="absolute inset-0 h-full w-full object-cover brightness-[.72]"
           fetchPriority="high"
-        />}
+        />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-5 md:p-10">
           <p className="text-xs uppercase tracking-[0.16em] text-white/80">A Tecvale</p>

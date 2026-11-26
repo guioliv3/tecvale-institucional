@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useRef, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { projectHref, type Empreendimento } from '@/content/empreendimentos'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ImageHoverLink } from '@/components/ui/ImageHoverLink'
@@ -15,9 +15,14 @@ type ProjectsShowcaseProps = {
 export function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
   const { projects: portfolio } = useEmpreendimentos()
   const visibleProjects = orderHomeProjects(projects ?? portfolio).slice(0, 6)
+  const projectOrder = visibleProjects.map(({ slug }) => slug).join('|')
   const trackRef = useRef<HTMLDivElement>(null)
   const drag = useRef<{ pointerId: number; x: number; scrollLeft: number; moved: boolean } | null>(null)
   const suppressClick = useRef(false)
+
+  useEffect(() => {
+    if (trackRef.current) trackRef.current.scrollLeft = 0
+  }, [projectOrder])
 
   function startDrag(event: ReactPointerEvent<HTMLDivElement>) {
     if (event.pointerType === 'mouse' && event.button !== 0) return

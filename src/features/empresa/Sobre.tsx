@@ -107,28 +107,31 @@ export function Sobre() {
               <div className="grid grid-cols-2 items-start gap-3 md:gap-6">
                 <Photo
                   photo={{
-                    src: img("fachada-1.jpg"),
-                    alt: "Fachada residencial cercada por vegetação, imagem ilustrativa",
+                    src: img("transition-region.webp"),
+                    alt: "Perspectiva do Ares Aquarius e da região ao entardecer",
                   }}
                   className="col-span-2 aspect-[16/8]"
+                  tag={false}
                 />
                 <Photo
                   photo={{
-                    src: img("concreto.jpg"),
-                    alt: "Detalhe de arquitetura em concreto, imagem ilustrativa",
+                    src: img("zen-webp.webp"),
+                    alt: "Espaço zen com banheira do Ares Aquarius",
                   }}
                   className="aspect-[4/5]"
+                  tag={false}
                 />
                 <Photo
                   photo={{
-                    src: img("casa-2.jpg"),
-                    alt: "Casa com revestimento em pedra, imagem ilustrativa",
+                    src: img("23-cobertura.webp"),
+                    alt: "Perspectiva da cobertura do Neori Jardim Aquarius",
                   }}
                   className="mt-8 aspect-[4/5] md:mt-16"
+                  tag={false}
                 />
               </div>
               <p className="mt-4 text-xs text-muted">
-                Imagens ilustrativas do material visual atual.
+                Perspectivas dos empreendimentos Tecvale.
               </p>
               <div className="mt-6">
                 <TextLink to="/empreendimentos">Ver empreendimentos</TextLink>

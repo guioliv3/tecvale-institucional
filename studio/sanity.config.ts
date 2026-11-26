@@ -9,7 +9,26 @@ export default defineConfig({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
   dataset: process.env.SANITY_STUDIO_DATASET!,
 
-  plugins: [structureTool(), ptBRLocale()],
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Conteúdo')
+          .items([
+            S.documentTypeListItem('empreendimento').title('Empreendimentos'),
+            S.listItem()
+              .title('Destaque da página inicial')
+              .id('homeHeroSettings')
+              .child(
+                S.document()
+                  .schemaType('siteSettings')
+                  .documentId('siteSettings')
+                  .title('Destaque da página inicial'),
+              ),
+          ]),
+    }),
+    ptBRLocale(),
+  ],
 
   schema: { types: schemaTypes },
 })
